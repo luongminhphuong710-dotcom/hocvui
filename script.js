@@ -304,6 +304,201 @@ const lessonBank = {
   },
 };
 
+const extraLessonBank = {
+  math: {
+    1: [
+      lesson("Trừ trong phạm vi 10", "Bớt đi một phần và đếm số còn lại.", ["8 - 3", "5", "10 - 4", "6"], [
+        q("Lan có 8 viên bi, cho bạn 3 viên. Lan còn mấy viên?", ["4", "5", "6", "7"], "5"),
+        q("10 - 4 bằng mấy?", ["5", "6", "7", "8"], "6"),
+        q("Phép tính nào có kết quả là 3?", ["5 - 2", "6 - 2", "7 - 3", "4 - 0"], "5 - 2"),
+      ]),
+      lesson("Số 11 đến 20", "Đếm, đọc và so sánh các số lớn hơn 10.", ["11", "15", "18", "20"], [
+        q("Số nào đứng sau 14?", ["13", "14", "15", "16"], "15"),
+        q("Số 19 gồm mấy chục và mấy đơn vị?", ["1 chục 9 đơn vị", "9 chục 1 đơn vị", "19 chục", "1 đơn vị 9 chục"], "1 chục 9 đơn vị"),
+        q("Số nào lớn nhất?", ["12", "17", "20", "15"], "20"),
+      ]),
+    ],
+    2: [
+      lesson("Trừ có nhớ", "Mượn một chục để trừ các số hai chữ số.", ["42 - 8", "34", "51 - 6", "45"], [
+        q("42 - 8 bằng mấy?", ["32", "34", "36", "38"], "34"),
+        q("51 - 6 bằng mấy?", ["43", "44", "45", "46"], "45"),
+        q("Có 63 quả cam, bán 9 quả. Còn lại bao nhiêu?", ["52", "53", "54", "55"], "54"),
+      ]),
+      lesson("Bảng nhân 5", "Đếm theo 5: 5, 10, 15, 20.", ["5", "10", "15", "20"], [
+        q("5 x 4 bằng mấy?", ["15", "20", "25", "30"], "20"),
+        q("Có 6 bàn, mỗi bàn 5 bạn. Có tất cả mấy bạn?", ["25", "30", "35", "40"], "30"),
+        q("Số tiếp theo: 5, 10, 15, ...", ["16", "18", "20", "25"], "20"),
+      ]),
+    ],
+    3: [
+      lesson("Làm quen phân số", "Nhận biết một phần trong các phần bằng nhau.", ["1/2", "1/4", "3/4", "Phần"], [
+        q("Một hình chia 4 phần bằng nhau, tô 1 phần là phân số nào?", ["1/2", "1/3", "1/4", "4/1"], "1/4"),
+        q("Phân số 3/4 có mẫu số là số nào?", ["3", "4", "7", "1"], "4"),
+        q("Phân số nào chỉ một nửa?", ["1/2", "1/3", "2/3", "3/4"], "1/2"),
+      ]),
+      lesson("Tiền Việt Nam", "Đọc giá tiền và cộng trừ số tiền đơn giản.", ["1.000đ", "2.000đ", "5.000đ", "10.000đ"], [
+        q("2.000đ + 3.000đ bằng bao nhiêu?", ["4.000đ", "5.000đ", "6.000đ", "7.000đ"], "5.000đ"),
+        q("Mua bút 7.000đ, đưa 10.000đ. Được trả lại bao nhiêu?", ["2.000đ", "3.000đ", "4.000đ", "5.000đ"], "3.000đ"),
+        q("Tờ tiền nào có giá trị lớn nhất?", ["1.000đ", "2.000đ", "5.000đ", "10.000đ"], "10.000đ"),
+      ]),
+    ],
+    4: [
+      lesson("Cộng trừ phân số cùng mẫu", "Giữ nguyên mẫu số, cộng hoặc trừ tử số.", ["1/5", "+", "2/5", "3/5"], [
+        q("1/5 + 2/5 bằng bao nhiêu?", ["2/5", "3/5", "3/10", "1/10"], "3/5"),
+        q("4/7 - 1/7 bằng bao nhiêu?", ["3/7", "5/7", "3/14", "4/6"], "3/7"),
+        q("Khi cộng hai phân số cùng mẫu, ta giữ nguyên gì?", ["Mẫu số", "Tử số", "Dấu phẩy", "Đơn vị đo"], "Mẫu số"),
+      ]),
+      lesson("Diện tích hình chữ nhật", "Lấy chiều dài nhân chiều rộng.", ["Dài", "Rộng", "S", "m²"], [
+        q("Hình chữ nhật dài 8 cm, rộng 3 cm. Diện tích là?", ["11 cm²", "22 cm²", "24 cm²", "30 cm²"], "24 cm²"),
+        q("Công thức diện tích hình chữ nhật là gì?", ["Dài x rộng", "Dài + rộng", "Dài - rộng", "Dài : rộng"], "Dài x rộng"),
+        q("Đơn vị nào dùng để đo diện tích?", ["cm²", "cm", "kg", "lít"], "cm²"),
+      ]),
+    ],
+    5: [
+      lesson("Nhân chia số thập phân", "Tính cẩn thận với dấu phẩy.", ["1,2 x 3", "3,6", "4,8 : 2", "2,4"], [
+        q("1,2 x 3 bằng bao nhiêu?", ["2,6", "3,2", "3,6", "4,2"], "3,6"),
+        q("4,8 : 2 bằng bao nhiêu?", ["2,2", "2,4", "2,6", "3,4"], "2,4"),
+        q("0,5 x 10 bằng bao nhiêu?", ["0,05", "0,5", "5", "50"], "5"),
+      ]),
+      lesson("Thể tích hình hộp", "Đếm phần không gian bên trong hình.", ["Dài", "Rộng", "Cao", "V"], [
+        q("Hình hộp dài 4 cm, rộng 3 cm, cao 2 cm. Thể tích là?", ["9 cm³", "12 cm³", "24 cm³", "36 cm³"], "24 cm³"),
+        q("Đơn vị nào dùng cho thể tích?", ["cm³", "cm²", "cm", "kg"], "cm³"),
+        q("Công thức thể tích hình hộp chữ nhật là gì?", ["Dài x rộng x cao", "Dài + rộng + cao", "Dài x rộng", "Dài : rộng"], "Dài x rộng x cao"),
+      ]),
+    ],
+  },
+  vietnamese: {
+    1: [
+      lesson("Vần quen thuộc", "Ghép âm và vần để đọc tiếng mới.", ["an", "ang", "at", "am"], [
+        q("Tiếng nào có vần 'an'?", ["bàn", "bút", "mèo", "sách"], "bàn"),
+        q("Tiếng 'cam' có vần nào?", ["am", "an", "ang", "at"], "am"),
+        q("Ghép 'b' với 'an' và dấu huyền được tiếng nào?", ["bàn", "ban", "bán", "bạn"], "bàn"),
+      ]),
+      lesson("Nghe và viết đúng", "Nghe tiếng ngắn rồi chọn chữ phù hợp.", ["cá", "lá", "má", "bé"], [
+        q("Từ nào chỉ con vật?", ["cá", "lá", "má", "bé"], "cá"),
+        q("Từ nào có dấu sắc?", ["lá", "la", "là", "lạ"], "lá"),
+        q("Chữ đầu trong tiếng 'bé' là gì?", ["b", "e", "m", "c"], "b"),
+      ]),
+    ],
+    2: [
+      lesson("Từ chỉ hoạt động", "Nhận biết việc ai đó đang làm.", ["đọc", "viết", "chạy", "hát"], [
+        q("Từ nào chỉ hoạt động?", ["viết", "bàn", "đỏ", "cao"], "viết"),
+        q("Trong câu 'Bé đọc sách.', từ chỉ hoạt động là gì?", ["Bé", "đọc", "sách", "câu"], "đọc"),
+        q("Từ nào không chỉ hoạt động?", ["nhảy", "ngủ", "cười", "cái ghế"], "cái ghế"),
+      ]),
+      lesson("Câu hỏi", "Biết dùng dấu hỏi và từ để hỏi.", ["Ai?", "Ở đâu?", "Khi nào?", "Vì sao?"], [
+        q("Câu hỏi kết thúc bằng dấu gì?", ["?", ".", ",", "!"], "?"),
+        q("Từ hỏi nào hỏi về người?", ["Ai", "Ở đâu", "Khi nào", "Bao nhiêu"], "Ai"),
+        q("Câu nào là câu hỏi?", ["Bạn tên là gì?", "Em đi học.", "Trời nắng.", "Con mèo ngủ."], "Bạn tên là gì?"),
+      ]),
+    ],
+    3: [
+      lesson("Câu Ai làm gì?", "Tìm người hoặc vật và hoạt động trong câu.", ["Ai?", "làm gì?", "Bạn", "đọc"], [
+        q("Câu nào thuộc kiểu Ai làm gì?", ["Lan tưới cây.", "Lan rất vui.", "Lan là học sinh.", "Cây xanh quá!"], "Lan tưới cây."),
+        q("Trong câu 'Mẹ nấu cơm.', bộ phận trả lời 'Ai?' là gì?", ["Mẹ", "nấu", "cơm", "nấu cơm"], "Mẹ"),
+        q("Bộ phận 'làm gì?' trong câu 'Chim hót líu lo.' là gì?", ["Chim", "hót líu lo", "líu lo", "câu"], "hót líu lo"),
+      ]),
+      lesson("Từ trái nghĩa", "Tìm cặp từ có nghĩa ngược nhau.", ["cao - thấp", "nóng - lạnh", "nhanh - chậm", "sáng - tối"], [
+        q("Từ trái nghĩa với 'cao' là gì?", ["thấp", "to", "rộng", "dài"], "thấp"),
+        q("Cặp nào là trái nghĩa?", ["nóng - lạnh", "đẹp - xinh", "to - lớn", "chăm - siêng"], "nóng - lạnh"),
+        q("Từ trái nghĩa với 'nhanh' là gì?", ["chậm", "sáng", "vui", "gần"], "chậm"),
+      ]),
+    ],
+    4: [
+      lesson("Tính từ", "Tìm từ tả đặc điểm của sự vật.", ["đẹp", "cao", "dịu", "xanh"], [
+        q("Từ nào là tính từ?", ["rực rỡ", "quyển vở", "đi học", "cái bàn"], "rực rỡ"),
+        q("Trong câu 'Bông hoa thơm ngát.', tính từ là gì?", ["Bông hoa", "thơm ngát", "câu", "là"], "thơm ngát"),
+        q("Tính từ thường dùng để làm gì?", ["Tả đặc điểm", "Đếm số", "Gọi tên người", "Chỉ thời gian"], "Tả đặc điểm"),
+      ]),
+      lesson("Kể chuyện theo tranh", "Sắp xếp sự việc theo đúng thứ tự.", ["Mở đầu", "Diễn biến", "Kết thúc", "Bài học"], [
+        q("Khi kể chuyện, cần chú ý điều gì?", ["Thứ tự sự việc", "Chỉ màu tranh", "Số trang vở", "Tên cây bút"], "Thứ tự sự việc"),
+        q("Phần đầu câu chuyện thường làm gì?", ["Giới thiệu nhân vật", "Nêu đáp số", "Viết bảng nhân", "Kết thúc luôn"], "Giới thiệu nhân vật"),
+        q("Sau khi kể xong, bé có thể nêu gì?", ["Bài học", "Đơn vị đo", "Phép chia", "Số thập phân"], "Bài học"),
+      ]),
+    ],
+    5: [
+      lesson("Câu ghép", "Nối hai vế câu có quan hệ với nhau.", ["vì...nên", "nếu...thì", "tuy...nhưng", "và"], [
+        q("Câu nào là câu ghép?", ["Trời mưa nên em mang áo mưa.", "Em học bài.", "Bông hoa đẹp.", "Bạn Lan chăm chỉ."], "Trời mưa nên em mang áo mưa."),
+        q("Cặp quan hệ từ nào chỉ nguyên nhân - kết quả?", ["vì...nên", "nếu...thì", "tuy...nhưng", "không những...mà còn"], "vì...nên"),
+        q("Trong câu ghép, mỗi vế câu thường có gì?", ["Chủ ngữ và vị ngữ", "Chỉ một dấu phẩy", "Một chữ cái", "Một số đo"], "Chủ ngữ và vị ngữ"),
+      ]),
+      lesson("Tả người", "Quan sát ngoại hình, hoạt động và tính cách.", ["Dáng", "Mắt", "Nụ cười", "Tính nết"], [
+        q("Khi tả người, nên quan sát gì?", ["Ngoại hình và hoạt động", "Chỉ số nhà", "Chỉ màu bút", "Chỉ phép tính"], "Ngoại hình và hoạt động"),
+        q("Từ nào tả tính cách?", ["hiền hậu", "cao lớn", "áo xanh", "mái tóc"], "hiền hậu"),
+        q("Bài văn tả người thường có mấy phần?", ["3 phần", "2 phần", "4 phần", "1 phần"], "3 phần"),
+      ]),
+    ],
+  },
+  english: {
+    1: [
+      lesson("Classroom commands", "Nghe lệnh ngắn trong lớp học.", ["stand up", "sit down", "open", "close"], [
+        q("'Stand up' nghĩa là gì?", ["Đứng lên", "Ngồi xuống", "Mở sách", "Đóng cửa"], "Đứng lên"),
+        q("'Sit down' nghĩa là gì?", ["Ngồi xuống", "Đứng lên", "Chạy", "Hát"], "Ngồi xuống"),
+        q("Câu nào nghĩa là mở sách?", ["Open your book.", "Close your book.", "Stand up.", "Goodbye."], "Open your book."),
+      ]),
+      lesson("Toys", "Gọi tên đồ chơi quen thuộc.", ["ball", "kite", "car", "doll"], [
+        q("'Ball' là gì?", ["Quả bóng", "Cái diều", "Xe đồ chơi", "Búp bê"], "Quả bóng"),
+        q("'Kite' là gì?", ["Cái diều", "Quả bóng", "Con mèo", "Cái bàn"], "Cái diều"),
+        q("Búp bê trong tiếng Anh là gì?", ["doll", "ball", "car", "book"], "doll"),
+      ]),
+    ],
+    2: [
+      lesson("Body parts", "Gọi tên các bộ phận cơ thể.", ["head", "hand", "leg", "eye"], [
+        q("'Head' nghĩa là gì?", ["Đầu", "Tay", "Chân", "Mắt"], "Đầu"),
+        q("'Eye' là gì?", ["Mắt", "Mũi", "Miệng", "Tai"], "Mắt"),
+        q("Tay trong tiếng Anh là gì?", ["hand", "leg", "head", "foot"], "hand"),
+      ]),
+      lesson("Weather", "Nói thời tiết hôm nay.", ["sunny", "rainy", "windy", "cloudy"], [
+        q("'Sunny' nghĩa là gì?", ["Có nắng", "Có mưa", "Có gió", "Có tuyết"], "Có nắng"),
+        q("'Rainy' nghĩa là gì?", ["Có mưa", "Có nắng", "Có mây", "Nóng"], "Có mưa"),
+        q("Câu nào hỏi thời tiết?", ["How's the weather?", "What's your name?", "How old are you?", "Where is my pen?"], "How's the weather?"),
+      ]),
+    ],
+    3: [
+      lesson("Hobbies", "Nói sở thích của mình.", ["draw", "dance", "swim", "read"], [
+        q("'I like drawing.' nghĩa là gì?", ["Mình thích vẽ", "Mình thích bơi", "Mình thích hát", "Mình thích chạy"], "Mình thích vẽ"),
+        q("'Swim' nghĩa là gì?", ["Bơi", "Vẽ", "Đọc", "Nhảy"], "Bơi"),
+        q("Câu nào nói sở thích?", ["I like reading.", "It is a desk.", "She is nine.", "Close the door."], "I like reading."),
+      ]),
+      lesson("Rooms", "Tên các phòng trong nhà.", ["bedroom", "kitchen", "bathroom", "living room"], [
+        q("'Kitchen' là phòng nào?", ["Nhà bếp", "Phòng ngủ", "Phòng tắm", "Phòng khách"], "Nhà bếp"),
+        q("'Bedroom' nghĩa là gì?", ["Phòng ngủ", "Nhà bếp", "Sân trường", "Thư viện"], "Phòng ngủ"),
+        q("Câu nào hỏi vị trí?", ["Where is the bathroom?", "What color is it?", "Do you like rice?", "How old are you?"], "Where is the bathroom?"),
+      ]),
+    ],
+    4: [
+      lesson("Time", "Hỏi và nói giờ đơn giản.", ["o'clock", "half past", "time", "late"], [
+        q("'What time is it?' nghĩa là gì?", ["Mấy giờ rồi?", "Bạn tên gì?", "Bạn ở đâu?", "Bạn thích gì?"], "Mấy giờ rồi?"),
+        q("'Seven o'clock' là mấy giờ?", ["7 giờ", "6 giờ", "8 giờ", "7 rưỡi"], "7 giờ"),
+        q("'Half past six' nghĩa là gì?", ["6 giờ rưỡi", "6 giờ đúng", "5 giờ rưỡi", "7 giờ"], "6 giờ rưỡi"),
+      ]),
+      lesson("Directions", "Làm quen chỉ đường ngắn.", ["left", "right", "straight", "turn"], [
+        q("'Left' nghĩa là gì?", ["Bên trái", "Bên phải", "Đi thẳng", "Quay lại"], "Bên trái"),
+        q("'Go straight' nghĩa là gì?", ["Đi thẳng", "Rẽ trái", "Rẽ phải", "Dừng lại"], "Đi thẳng"),
+        q("'Turn right' nghĩa là gì?", ["Rẽ phải", "Rẽ trái", "Đi thẳng", "Ngồi xuống"], "Rẽ phải"),
+      ]),
+    ],
+    5: [
+      lesson("Future plans", "Nói dự định gần bằng 'going to'.", ["going to", "tomorrow", "visit", "play"], [
+        q("'I am going to visit grandma.' nghĩa là gì?", ["Mình sẽ thăm bà", "Mình đang đọc sách", "Mình thích sữa", "Mình đã đi học"], "Mình sẽ thăm bà"),
+        q("Từ nào chỉ ngày mai?", ["tomorrow", "yesterday", "now", "last week"], "tomorrow"),
+        q("Câu nào nói dự định?", ["I am going to play football.", "I played football.", "I play every day.", "This is a ball."], "I am going to play football."),
+      ]),
+      lesson("Comparatives", "So sánh hơn bằng từ ngắn.", ["bigger", "smaller", "taller", "faster"], [
+        q("'Taller' nghĩa là gì?", ["Cao hơn", "Thấp hơn", "Nhanh hơn", "Nhỏ hơn"], "Cao hơn"),
+        q("Từ so sánh hơn của 'big' là gì?", ["bigger", "biggest", "bigly", "more big"], "bigger"),
+        q("Câu nào đúng?", ["An elephant is bigger than a cat.", "A cat bigger an elephant.", "An elephant bigger than.", "Bigger cat elephant."], "An elephant is bigger than a cat."),
+      ]),
+    ],
+  },
+};
+
+Object.entries(extraLessonBank).forEach(([subjectKey, gradeGroups]) => {
+  Object.entries(gradeGroups).forEach(([grade, lessons]) => {
+    lessonBank[subjectKey][Number(grade)].push(...lessons);
+  });
+});
+
 const stories = [
   {
     title: "Cây tre trăm đốt",

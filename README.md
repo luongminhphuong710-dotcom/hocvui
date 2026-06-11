@@ -8,7 +8,7 @@ Mở file `index.html` bằng trình duyệt.
 
 ## Cấu trúc trang
 
-- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh.
+- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Mỗi lớp/môn hiện có 5 bài học và câu hỏi luyện tập.
 - `giai-tri.html`: Trang Giải trí, có Giải đố, Mini game, Game khác và video truyện cổ tích.
 - `ban-tin.html`: Trang Bản tin, có bài tin ngắn và mẹo học tập hay.
 
