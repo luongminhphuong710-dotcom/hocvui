@@ -721,17 +721,33 @@ const studyTips = [
   },
 ];
 
+const boothThemePacks = [
+  { key: "boys", label: "Con trai", note: "Mạnh mẽ, khám phá" },
+  { key: "girls", label: "Con gái", note: "Dịu dàng, lấp lánh" },
+  { key: "family", label: "Gia đình", note: "Ấm áp, yêu thương" },
+];
+
 const boothFrames = [
-  { key: "princess", label: "Công chúa", className: "frame-princess", previewClass: "preview-princess" },
-  { key: "kitty", label: "Mèo nơ hồng", className: "frame-kitty", previewClass: "preview-kitty" },
-  { key: "superhero", label: "Siêu nhân", className: "frame-superhero", previewClass: "preview-superhero" },
-  { key: "family", label: "Gia đình vui nhất", className: "frame-family", previewClass: "preview-family" },
-  { key: "love", label: "Yêu cả nhà", className: "frame-love", previewClass: "preview-love" },
-  { key: "rainbow", label: "Cầu vồng", className: "frame-rainbow", previewClass: "preview-rainbow" },
-  { key: "stars", label: "Ngôi sao", className: "frame-stars", previewClass: "preview-stars" },
-  { key: "notebook", label: "Vở ô ly", className: "frame-notebook", previewClass: "preview-notebook" },
-  { key: "garden", label: "Vườn xanh", className: "frame-garden", previewClass: "preview-garden" },
-  { key: "clean", label: "Khung trắng", className: "frame-clean", previewClass: "preview-clean" },
+  { key: "superhero", pack: "boys", label: "Siêu nhân", className: "frame-superhero", previewClass: "preview-superhero" },
+  { key: "space", pack: "boys", label: "Phi hành gia", className: "frame-space", previewClass: "preview-space" },
+  { key: "robot", pack: "boys", label: "Robot vui", className: "frame-robot", previewClass: "preview-robot" },
+  { key: "racing", pack: "boys", label: "Xe đua", className: "frame-racing", previewClass: "preview-racing" },
+  { key: "football", pack: "boys", label: "Bóng đá", className: "frame-football", previewClass: "preview-football" },
+  { key: "dino", pack: "boys", label: "Khủng long", className: "frame-dino", previewClass: "preview-dino" },
+  { key: "princess", pack: "girls", label: "Công chúa", className: "frame-princess", previewClass: "preview-princess" },
+  { key: "kitty", pack: "girls", label: "Mèo nơ hồng", className: "frame-kitty", previewClass: "preview-kitty" },
+  { key: "fairy", pack: "girls", label: "Nàng tiên", className: "frame-fairy", previewClass: "preview-fairy" },
+  { key: "mermaid", pack: "girls", label: "Nàng tiên cá", className: "frame-mermaid", previewClass: "preview-mermaid" },
+  { key: "rainbow", pack: "girls", label: "Cầu vồng", className: "frame-rainbow", previewClass: "preview-rainbow" },
+  { key: "stars", pack: "girls", label: "Ngôi sao", className: "frame-stars", previewClass: "preview-stars" },
+  { key: "family", pack: "family", label: "Gia đình vui nhất", className: "frame-family", previewClass: "preview-family" },
+  { key: "love", pack: "family", label: "Yêu cả nhà", className: "frame-love", previewClass: "preview-love" },
+  { key: "home", pack: "family", label: "Mái nhà yêu", className: "frame-home", previewClass: "preview-home" },
+  { key: "birthday", pack: "family", label: "Sinh nhật vui", className: "frame-birthday", previewClass: "preview-birthday" },
+  { key: "picnic", pack: "family", label: "Dã ngoại", className: "frame-picnic", previewClass: "preview-picnic" },
+  { key: "garden", pack: "family", label: "Vườn xanh", className: "frame-garden", previewClass: "preview-garden" },
+  { key: "notebook", pack: "family", label: "Vở ô ly", className: "frame-notebook", previewClass: "preview-notebook" },
+  { key: "clean", pack: "family", label: "Khung trắng", className: "frame-clean", previewClass: "preview-clean" },
 ];
 
 const state = {
@@ -746,7 +762,8 @@ const state = {
   memoryBusy: false,
   riddleIndex: 0,
   colorIndex: 0,
-  boothFrameKey: "princess",
+  boothThemeKey: "boys",
+  boothFrameKey: "superhero",
 };
 
 const dom = {
@@ -789,9 +806,11 @@ const dom = {
   colorOptions: document.querySelector("#colorOptions"),
   colorFeedback: document.querySelector("#colorFeedback"),
   newColorBtn: document.querySelector("#newColorBtn"),
+  boothThemeTabs: document.querySelector("#boothThemeTabs"),
   boothFrameList: document.querySelector("#boothFrameList"),
   boothFrameOverlay: document.querySelector("#boothFrameOverlay"),
   boothFrameName: document.querySelector("#boothFrameName"),
+  captureSuccess: document.querySelector("#captureSuccess"),
   boothVideo: document.querySelector("#boothVideo"),
   boothCanvas: document.querySelector("#boothCanvas"),
   cameraPlaceholder: document.querySelector("#cameraPlaceholder"),
@@ -1275,11 +1294,39 @@ function currentBoothFrame() {
   return boothFrames.find((frame) => frame.key === state.boothFrameKey) || boothFrames[0];
 }
 
+function currentThemeFrames() {
+  return boothFrames.filter((frame) => frame.pack === state.boothThemeKey);
+}
+
+function renderBoothThemeTabs() {
+  if (!dom.boothThemeTabs) return;
+
+  dom.boothThemeTabs.innerHTML = "";
+  boothThemePacks.forEach((pack) => {
+    const button = document.createElement("button");
+    button.className = `theme-tab${pack.key === state.boothThemeKey ? " is-active" : ""}`;
+    button.type = "button";
+    button.innerHTML = `<strong>${pack.label}</strong><span>${pack.note}</span>`;
+    button.addEventListener("click", () => {
+      state.boothThemeKey = pack.key;
+      const frames = currentThemeFrames();
+      if (!frames.some((frame) => frame.key === state.boothFrameKey)) {
+        state.boothFrameKey = frames[0].key;
+      }
+      renderBoothThemeTabs();
+      renderBoothFrames();
+      applyBoothFrame();
+      updateBoothStatus(`Đã mở bộ theme ${pack.label}.`);
+    });
+    dom.boothThemeTabs.append(button);
+  });
+}
+
 function renderBoothFrames() {
   if (!dom.boothFrameList) return;
 
   dom.boothFrameList.innerHTML = "";
-  boothFrames.forEach((frame) => {
+  currentThemeFrames().forEach((frame) => {
     const button = document.createElement("button");
     button.className = `frame-option${frame.key === state.boothFrameKey ? " is-active" : ""}`;
     button.type = "button";
@@ -1419,6 +1466,62 @@ function finishBoothCanvas(context, width, height, message) {
   dom.downloadPhotoLink.classList.remove("disabled-link");
   if (dom.retakePhotoBtn) dom.retakePhotoBtn.disabled = false;
   updateBoothStatus(message);
+  playCaptureSuccessSound();
+  showCaptureSuccessEffect();
+}
+
+function playCaptureSuccessSound() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+
+  try {
+    const audioContext = new AudioContext();
+    const masterGain = audioContext.createGain();
+    masterGain.gain.setValueAtTime(0.0001, audioContext.currentTime);
+    masterGain.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.02);
+    masterGain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.58);
+    masterGain.connect(audioContext.destination);
+
+    [660, 880, 1180].forEach((frequency, index) => {
+      const start = audioContext.currentTime + index * 0.12;
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequency, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.42, start + 0.018);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.11);
+      oscillator.connect(gain);
+      gain.connect(masterGain);
+      oscillator.start(start);
+      oscillator.stop(start + 0.14);
+    });
+
+    window.setTimeout(() => audioContext.close(), 750);
+  } catch (error) {
+    // Some mobile browsers allow vibration but block Web Audio until a user gesture.
+  }
+
+  if (navigator.vibrate) navigator.vibrate([45, 35, 45]);
+}
+
+function showCaptureSuccessEffect() {
+  const viewfinder = dom.boothVideo?.closest(".camera-viewfinder");
+  if (!viewfinder || !dom.captureSuccess) return;
+
+  viewfinder.classList.remove("is-shot-success");
+  dom.captureSuccess.classList.remove("is-showing");
+  window.clearTimeout(showCaptureSuccessEffect.timer);
+
+  requestAnimationFrame(() => {
+    viewfinder.classList.add("is-shot-success");
+    dom.captureSuccess.classList.add("is-showing");
+  });
+
+  showCaptureSuccessEffect.timer = window.setTimeout(() => {
+    viewfinder.classList.remove("is-shot-success");
+    dom.captureSuccess.classList.remove("is-showing");
+  }, 1200);
 }
 
 function clearBoothPhoto() {
@@ -1446,11 +1549,41 @@ function drawBoothFrame(context, width, height, frame) {
     case "superhero":
       drawSuperheroFrame(context, width, height);
       break;
+    case "space":
+      drawSpaceFrame(context, width, height);
+      break;
+    case "robot":
+      drawRobotFrame(context, width, height);
+      break;
+    case "racing":
+      drawRacingFrame(context, width, height);
+      break;
+    case "football":
+      drawFootballFrame(context, width, height);
+      break;
+    case "dino":
+      drawDinoFrame(context, width, height);
+      break;
     case "family":
       drawFamilyFrame(context, width, height);
       break;
     case "love":
       drawLoveFrame(context, width, height);
+      break;
+    case "fairy":
+      drawFairyFrame(context, width, height);
+      break;
+    case "mermaid":
+      drawMermaidFrame(context, width, height);
+      break;
+    case "home":
+      drawHomeFrame(context, width, height);
+      break;
+    case "birthday":
+      drawBirthdayFrame(context, width, height);
+      break;
+    case "picnic":
+      drawPicnicFrame(context, width, height);
       break;
     case "rainbow":
       drawRainbowFrame(context, width, height);
@@ -1549,6 +1682,47 @@ function drawSuperheroFrame(context, width, height) {
   drawFrameLabel(context, width - 142, height - 74, "Bé siêu nhân", 260, "#ffd166");
 }
 
+function drawSpaceFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#253047");
+  fillFrameBorder(context, width, height, 48, "#6bb8ff");
+  drawPlanet(context, 96, 86, 42, "#ffd166");
+  drawPlanet(context, width - 102, height - 90, 48, "#9a7bd8");
+  drawStar(context, width - 92, 86, 26, 11, "#ffffff");
+  drawStar(context, 92, height - 86, 24, 10, "#ffffff");
+}
+
+function drawRobotFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 68, "#dff3ff");
+  fillFrameBorder(context, width, height, 42, "#9a7bd8");
+  drawRobotHead(context, 98, 84, 84, 62);
+  drawRobotHead(context, width - 98, height - 84, 84, 62);
+  drawFrameLabel(context, width / 2, height - 72, "Robot vui", 260, "#ffffff");
+}
+
+function drawRacingFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 70, "#ff7a7a");
+  drawCheckerStrip(context, 0, 0, width, 34);
+  drawCheckerStrip(context, 0, height - 34, width, 34);
+  drawBolt(context, 92, 92, 78, "#ffd166");
+  drawFrameLabel(context, width - 130, height - 72, "Xe đua", 220, "#ffd166");
+}
+
+function drawFootballFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 70, "#83c45e");
+  fillFrameBorder(context, width, height, 42, "#eafadf");
+  drawFootball(context, 94, 86, 42);
+  drawFootball(context, width - 94, height - 86, 42);
+  drawFrameLabel(context, width / 2, height - 72, "Bóng đá", 230, "#ffffff");
+}
+
+function drawDinoFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 72, "#eafadf");
+  fillFrameBorder(context, width, height, 46, "#83c45e");
+  drawDino(context, 108, height - 92, "#78d6b6");
+  drawDino(context, width - 108, 92, "#ffd166");
+  drawFrameLabel(context, width / 2, 72, "Khủng long", 260, "#ffffff");
+}
+
 function drawFamilyFrame(context, width, height) {
   fillFrameBorder(context, width, height, 74, "#ffd166");
   fillFrameBorder(context, width, height, 54, "#78d6b6");
@@ -1566,6 +1740,48 @@ function drawLoveFrame(context, width, height) {
   drawHeart(context, width - 92, 86, 38, "#ff7a7a");
   drawHeart(context, 90, height - 86, 28, "#ffb3d1");
   drawFrameLabel(context, width / 2, height - 72, "Yêu cả nhà", Math.min(width - 190, 360), "#ffffff");
+}
+
+function drawFairyFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#f6d9ff");
+  fillFrameBorder(context, width, height, 48, "#ffd7ef");
+  drawWing(context, 96, 92, "#ffffff");
+  drawWing(context, width - 96, 92, "#ffffff", true);
+  drawStar(context, 96, height - 88, 36, 15, "#ffd166");
+  drawStar(context, width - 96, height - 88, 36, 15, "#78d6b6");
+  drawFrameLabel(context, width / 2, height - 72, "Nàng tiên", 260, "#ffffff");
+}
+
+function drawMermaidFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#6bb8ff");
+  drawWaveStrip(context, width, height, 42, "#78d6b6");
+  drawShell(context, 96, 88, 42, "#ffd7ef");
+  drawShell(context, width - 96, 88, 42, "#ffd166");
+  drawFrameLabel(context, width / 2, height - 72, "Nàng tiên cá", 310, "#ffffff");
+}
+
+function drawHomeFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#fff8dd");
+  fillFrameBorder(context, width, height, 48, "#ffd166");
+  drawHouse(context, 108, 92, 86);
+  drawHeart(context, width - 96, 86, 32, "#ff7a7a");
+  drawFrameLabel(context, width / 2, height - 72, "Mái nhà yêu", 300, "#ffffff");
+}
+
+function drawBirthdayFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#fff1b8");
+  fillFrameBorder(context, width, height, 48, "#ffb3d1");
+  drawBalloon(context, 90, 100, "#6bb8ff");
+  drawBalloon(context, width - 90, 100, "#ff7a7a");
+  drawCake(context, width / 2, height - 84, 130, 72);
+}
+
+function drawPicnicFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#eafadf");
+  fillFrameBorder(context, width, height, 48, "#78d6b6");
+  drawSun(context, width - 92, 86, 36);
+  drawPicnicBasket(context, 112, height - 86, 110, 64);
+  drawFrameLabel(context, width / 2, height - 72, "Dã ngoại vui", 300, "#ffffff");
 }
 
 function drawCrown(context, x, y, width, height) {
@@ -1727,6 +1943,233 @@ function drawRoundedRect(context, x, y, width, height, radius, fill, stroke, lin
   context.restore();
 }
 
+function drawPlanet(context, x, y, radius, color) {
+  context.save();
+  context.beginPath();
+  context.arc(x, y, radius, 0, Math.PI * 2);
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.beginPath();
+  context.ellipse(x, y, radius * 1.45, radius * 0.38, -0.28, 0, Math.PI * 2);
+  context.strokeStyle = "#ffffff";
+  context.lineWidth = 8;
+  context.stroke();
+  context.restore();
+}
+
+function drawRobotHead(context, x, y, width, height) {
+  context.save();
+  drawRoundedRect(context, x - width / 2, y - height / 2, width, height, 10, "#d9e2e7", "#263238", 5);
+  context.fillStyle = "#263238";
+  context.beginPath();
+  context.arc(x - width * 0.2, y - 5, 6, 0, Math.PI * 2);
+  context.arc(x + width * 0.2, y - 5, 6, 0, Math.PI * 2);
+  context.fill();
+  context.strokeStyle = "#263238";
+  context.lineWidth = 4;
+  context.beginPath();
+  context.moveTo(x - 18, y + 16);
+  context.lineTo(x + 18, y + 16);
+  context.stroke();
+  context.restore();
+}
+
+function drawCheckerStrip(context, x, y, width, height) {
+  const size = height / 2;
+  for (let row = 0; row < 2; row += 1) {
+    for (let col = 0; col < Math.ceil(width / size); col += 1) {
+      context.fillStyle = (row + col) % 2 === 0 ? "#ffffff" : "#263238";
+      context.fillRect(x + col * size, y + row * size, size, size);
+    }
+  }
+}
+
+function drawFootball(context, x, y, radius) {
+  context.save();
+  context.beginPath();
+  context.arc(x, y, radius, 0, Math.PI * 2);
+  context.fillStyle = "#ffffff";
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.beginPath();
+  context.moveTo(x - radius * 0.65, y);
+  context.lineTo(x + radius * 0.65, y);
+  context.moveTo(x, y - radius * 0.65);
+  context.lineTo(x, y + radius * 0.65);
+  context.stroke();
+  context.restore();
+}
+
+function drawDino(context, x, y, color) {
+  context.save();
+  context.translate(x, y);
+  context.fillStyle = color;
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.beginPath();
+  context.ellipse(0, 0, 54, 32, 0, 0, Math.PI * 2);
+  context.fill();
+  context.stroke();
+  context.beginPath();
+  context.arc(50, -24, 26, 0, Math.PI * 2);
+  context.fill();
+  context.stroke();
+  context.beginPath();
+  context.moveTo(-42, -28);
+  context.lineTo(-28, -58);
+  context.lineTo(-14, -28);
+  context.lineTo(0, -58);
+  context.lineTo(14, -28);
+  context.fill();
+  context.stroke();
+  context.fillStyle = "#263238";
+  context.beginPath();
+  context.arc(58, -30, 4, 0, Math.PI * 2);
+  context.fill();
+  context.restore();
+}
+
+function drawWing(context, x, y, color, flip = false) {
+  context.save();
+  context.translate(x, y);
+  if (flip) context.scale(-1, 1);
+  context.beginPath();
+  context.ellipse(-16, -8, 34, 54, -0.45, 0, Math.PI * 2);
+  context.ellipse(28, 20, 28, 42, 0.55, 0, Math.PI * 2);
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function drawWaveStrip(context, width, height, size, color) {
+  context.fillStyle = color;
+  context.fillRect(0, height - size * 1.8, width, size * 1.8);
+  context.strokeStyle = "#ffffff";
+  context.lineWidth = 8;
+  for (let x = -size; x < width + size; x += size * 2) {
+    context.beginPath();
+    context.arc(x, height - size * 1.8, size, 0, Math.PI);
+    context.stroke();
+  }
+}
+
+function drawShell(context, x, y, radius, color) {
+  context.save();
+  context.translate(x, y);
+  context.fillStyle = color;
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.beginPath();
+  context.arc(0, 0, radius, Math.PI, 0);
+  context.lineTo(radius, radius * 0.72);
+  context.lineTo(-radius, radius * 0.72);
+  context.closePath();
+  context.fill();
+  context.stroke();
+  for (let index = -2; index <= 2; index += 1) {
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(index * radius * 0.3, radius * 0.7);
+    context.stroke();
+  }
+  context.restore();
+}
+
+function drawHouse(context, x, y, size) {
+  context.save();
+  context.fillStyle = "#ffffff";
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.beginPath();
+  context.moveTo(x, y - size * 0.55);
+  context.lineTo(x - size * 0.55, y);
+  context.lineTo(x + size * 0.55, y);
+  context.closePath();
+  context.fillStyle = "#ff7a7a";
+  context.fill();
+  context.stroke();
+  drawRoundedRect(context, x - size * 0.4, y, size * 0.8, size * 0.56, 6, "#ffffff", "#263238", 5);
+  context.restore();
+}
+
+function drawBalloon(context, x, y, color) {
+  context.save();
+  context.beginPath();
+  context.ellipse(x, y, 28, 38, 0, 0, Math.PI * 2);
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.beginPath();
+  context.moveTo(x, y + 38);
+  context.lineTo(x - 14, y + 86);
+  context.stroke();
+  context.restore();
+}
+
+function drawCake(context, x, y, width, height) {
+  context.save();
+  drawRoundedRect(context, x - width / 2, y - height / 2, width, height, 8, "#ffffff", "#263238", 5);
+  context.fillStyle = "#ffb3d1";
+  context.fillRect(x - width / 2, y - height / 2, width, height * 0.35);
+  context.strokeStyle = "#263238";
+  context.lineWidth = 4;
+  context.strokeRect(x - width / 2, y - height / 2, width, height * 0.35);
+  [x - 28, x, x + 28].forEach((candleX) => {
+    context.fillStyle = "#6bb8ff";
+    context.fillRect(candleX - 4, y - height / 2 - 28, 8, 28);
+    context.beginPath();
+    context.arc(candleX, y - height / 2 - 34, 7, 0, Math.PI * 2);
+    context.fillStyle = "#ffd166";
+    context.fill();
+  });
+  context.restore();
+}
+
+function drawSun(context, x, y, radius) {
+  context.save();
+  context.translate(x, y);
+  context.strokeStyle = "#ffd166";
+  context.lineWidth = 6;
+  for (let index = 0; index < 12; index += 1) {
+    const angle = (Math.PI * 2 * index) / 12;
+    context.beginPath();
+    context.moveTo(Math.cos(angle) * (radius + 8), Math.sin(angle) * (radius + 8));
+    context.lineTo(Math.cos(angle) * (radius + 24), Math.sin(angle) * (radius + 24));
+    context.stroke();
+  }
+  context.beginPath();
+  context.arc(0, 0, radius, 0, Math.PI * 2);
+  context.fillStyle = "#ffd166";
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function drawPicnicBasket(context, x, y, width, height) {
+  context.save();
+  drawRoundedRect(context, x - width / 2, y - height / 2, width, height, 10, "#ffd166", "#263238", 5);
+  context.beginPath();
+  context.arc(x, y - height / 2, width * 0.34, Math.PI, 0);
+  context.strokeStyle = "#263238";
+  context.lineWidth = 6;
+  context.stroke();
+  context.fillStyle = "#ff7a7a";
+  context.fillRect(x - width / 2 + 12, y - 4, width - 24, 12);
+  context.restore();
+}
+
 function drawStar(context, x, y, outerRadius, innerRadius, color) {
   context.save();
   context.beginPath();
@@ -1768,6 +2211,7 @@ function updateBoothStatus(message) {
 function setupPhotoBooth() {
   if (!dom.boothFrameList) return;
 
+  renderBoothThemeTabs();
   renderBoothFrames();
   applyBoothFrame();
   dom.startCameraBtn?.addEventListener("click", startBoothCamera);

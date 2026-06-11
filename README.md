@@ -10,7 +10,7 @@ Mở file `index.html` bằng trình duyệt.
 
 - `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng lộ trình SGK, danh sách bài học, video bài giảng và bài tập. Mỗi lớp/môn hiện có 5 bài học và câu hỏi luyện tập.
 - `giai-tri.html`: Trang Giải trí, có Giải đố, Mini game, Game khác và video truyện cổ tích.
-- `chup-anh-vui.html`: Trang Chụp ảnh vui, có photobooth dùng camera trước, chọn khung và tải ảnh PNG. Khung gồm công chúa, mèo nơ hồng, siêu nhân, gia đình và yêu cả nhà.
+- `chup-anh-vui.html`: Trang Chụp ảnh vui, có photobooth dùng camera trước, chọn bộ theme, ghép khung và tải ảnh PNG. Có bộ theme Con trai, Con gái, Gia đình; khi chụp thành công sẽ có âm báo và hiệu ứng trên màn hình.
 - `ban-tin.html`: Trang Bản tin, có bài tin ngắn và mẹo học tập hay.
 
 Trang Chụp ảnh vui cần mở qua `localhost` hoặc HTTPS để trình duyệt cho phép dùng camera. Nếu dùng VS Code, có thể mở bằng Live Server.

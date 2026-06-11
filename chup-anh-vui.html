@@ -34,9 +34,10 @@
           <div class="section-heading">
             <div>
               <p class="eyebrow">Khung ảnh</p>
-              <h2>Chọn khung</h2>
+              <h2>Chọn theme</h2>
             </div>
           </div>
+          <div class="theme-tabs" id="boothThemeTabs" aria-label="Bộ theme"></div>
           <div class="frame-list" id="boothFrameList"></div>
         </aside>
 
@@ -51,6 +52,10 @@
             <div class="camera-viewfinder" id="cameraViewfinder">
               <video id="boothVideo" autoplay playsinline muted></video>
               <div class="booth-frame frame-rainbow" id="boothFrameOverlay" aria-hidden="true"></div>
+              <div class="capture-success" id="captureSuccess" aria-hidden="true">
+                <span></span>
+                <strong>Đã chụp!</strong>
+              </div>
               <div class="camera-placeholder" id="cameraPlaceholder">
                 <span class="lens-shape" aria-hidden="true"></span>
                 <strong>Sẵn sàng</strong>
