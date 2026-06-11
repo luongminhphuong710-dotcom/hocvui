@@ -638,6 +638,11 @@ const studyTips = [
 ];
 
 const boothFrames = [
+  { key: "princess", label: "Công chúa", className: "frame-princess", previewClass: "preview-princess" },
+  { key: "kitty", label: "Mèo nơ hồng", className: "frame-kitty", previewClass: "preview-kitty" },
+  { key: "superhero", label: "Siêu nhân", className: "frame-superhero", previewClass: "preview-superhero" },
+  { key: "family", label: "Gia đình vui nhất", className: "frame-family", previewClass: "preview-family" },
+  { key: "love", label: "Yêu cả nhà", className: "frame-love", previewClass: "preview-love" },
   { key: "rainbow", label: "Cầu vồng", className: "frame-rainbow", previewClass: "preview-rainbow" },
   { key: "stars", label: "Ngôi sao", className: "frame-stars", previewClass: "preview-stars" },
   { key: "notebook", label: "Vở ô ly", className: "frame-notebook", previewClass: "preview-notebook" },
@@ -657,7 +662,7 @@ const state = {
   memoryBusy: false,
   riddleIndex: 0,
   colorIndex: 0,
-  boothFrameKey: "rainbow",
+  boothFrameKey: "princess",
 };
 
 const dom = {
@@ -1185,6 +1190,21 @@ function clearBoothPhoto() {
 
 function drawBoothFrame(context, width, height, frame) {
   switch (frame.key) {
+    case "princess":
+      drawPrincessFrame(context, width, height);
+      break;
+    case "kitty":
+      drawKittyFrame(context, width, height);
+      break;
+    case "superhero":
+      drawSuperheroFrame(context, width, height);
+      break;
+    case "family":
+      drawFamilyFrame(context, width, height);
+      break;
+    case "love":
+      drawLoveFrame(context, width, height);
+      break;
     case "rainbow":
       drawRainbowFrame(context, width, height);
       break;
@@ -1252,6 +1272,212 @@ function fillFrameBorder(context, width, height, size, color) {
   context.fillRect(0, height - size, width, size);
   context.fillRect(0, 0, size, height);
   context.fillRect(width - size, 0, size, height);
+}
+
+function drawPrincessFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 72, "#f6d9ff");
+  fillFrameBorder(context, width, height, 54, "#ffd166");
+  fillFrameBorder(context, width, height, 34, "#ffd7ef");
+  drawCrown(context, width / 2, 82, 150, 82);
+  drawStar(context, width - 86, height - 86, 42, 18, "#ff7a7a");
+  drawStar(context, 92, height - 92, 32, 14, "#ffd166");
+}
+
+function drawKittyFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 72, "#ffd7ef");
+  fillFrameBorder(context, width, height, 54, "#ffb3d1");
+  fillFrameBorder(context, width, height, 32, "#ffffff");
+  drawCatEar(context, 86, 38, 96, "left");
+  drawCatEar(context, width - 86, 38, 96, "right");
+  drawBow(context, width - 112, 76, 72, "#ff7a7a");
+  drawHeart(context, 92, height - 82, 30, "#ffb3d1");
+}
+
+function drawSuperheroFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 80, "#6bb8ff");
+  fillFrameBorder(context, width, height, 58, "#ff7a7a");
+  fillFrameBorder(context, width, height, 34, "#263238");
+  drawBolt(context, 84, 92, 94, "#ffd166");
+  drawStar(context, width - 86, 86, 36, 15, "#ffd166");
+  drawFrameLabel(context, width - 142, height - 74, "Bé siêu nhân", 260, "#ffd166");
+}
+
+function drawFamilyFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 74, "#ffd166");
+  fillFrameBorder(context, width, height, 54, "#78d6b6");
+  fillFrameBorder(context, width, height, 34, "#fff8dd");
+  drawFamilyHeads(context, 122, 86);
+  drawHeart(context, width - 92, 82, 32, "#ff7a7a");
+  drawFrameLabel(context, width / 2, height - 72, "Gia đình mình vui nhất", Math.min(width - 170, 520), "#ffffff");
+}
+
+function drawLoveFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 76, "#fff1b8");
+  fillFrameBorder(context, width, height, 56, "#ff7a7a");
+  fillFrameBorder(context, width, height, 34, "#ffe4e7");
+  drawHeart(context, 92, 86, 38, "#ff7a7a");
+  drawHeart(context, width - 92, 86, 38, "#ff7a7a");
+  drawHeart(context, 90, height - 86, 28, "#ffb3d1");
+  drawFrameLabel(context, width / 2, height - 72, "Yêu cả nhà", Math.min(width - 190, 360), "#ffffff");
+}
+
+function drawCrown(context, x, y, width, height) {
+  const left = x - width / 2;
+  const top = y - height / 2;
+  context.save();
+  context.beginPath();
+  context.moveTo(left, top + height);
+  context.lineTo(left + width * 0.16, top + height * 0.3);
+  context.lineTo(left + width * 0.34, top + height * 0.68);
+  context.lineTo(left + width * 0.5, top);
+  context.lineTo(left + width * 0.66, top + height * 0.68);
+  context.lineTo(left + width * 0.84, top + height * 0.3);
+  context.lineTo(left + width, top + height);
+  context.closePath();
+  context.fillStyle = "#ffd166";
+  context.fill();
+  context.lineWidth = 7;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  ["#ff7a7a", "#6bb8ff", "#78d6b6"].forEach((color, index) => {
+    context.beginPath();
+    context.arc(left + width * (0.3 + index * 0.2), top + height * 0.72, 8, 0, Math.PI * 2);
+    context.fillStyle = color;
+    context.fill();
+    context.stroke();
+  });
+  context.restore();
+}
+
+function drawCatEar(context, x, y, size, side) {
+  const direction = side === "left" ? -1 : 1;
+  context.save();
+  context.beginPath();
+  context.moveTo(x, y);
+  context.lineTo(x + direction * size * 0.74, y + size * 0.72);
+  context.lineTo(x - direction * size * 0.16, y + size * 0.78);
+  context.closePath();
+  context.fillStyle = "#ffffff";
+  context.fill();
+  context.lineWidth = 6;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function drawBow(context, x, y, size, color) {
+  context.save();
+  context.fillStyle = color;
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.beginPath();
+  context.ellipse(x - size * 0.34, y, size * 0.32, size * 0.22, 0, 0, Math.PI * 2);
+  context.ellipse(x + size * 0.34, y, size * 0.32, size * 0.22, 0, 0, Math.PI * 2);
+  context.fill();
+  context.stroke();
+  context.beginPath();
+  context.arc(x, y, size * 0.16, 0, Math.PI * 2);
+  context.fillStyle = "#ffd7ef";
+  context.fill();
+  context.stroke();
+  context.restore();
+}
+
+function drawBolt(context, x, y, size, color) {
+  context.save();
+  context.translate(x, y);
+  context.beginPath();
+  context.moveTo(size * 0.18, -size * 0.55);
+  context.lineTo(-size * 0.3, size * 0.05);
+  context.lineTo(size * 0.02, size * 0.05);
+  context.lineTo(-size * 0.18, size * 0.58);
+  context.lineTo(size * 0.42, -size * 0.16);
+  context.lineTo(size * 0.08, -size * 0.16);
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 7;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function drawFamilyHeads(context, x, y) {
+  const people = [
+    { x: x - 42, y: y + 8, color: "#ffd166", radius: 24 },
+    { x, y: y - 2, color: "#ff7a7a", radius: 28 },
+    { x: x + 44, y: y + 8, color: "#6bb8ff", radius: 24 },
+  ];
+  people.forEach((person) => {
+    context.beginPath();
+    context.arc(person.x, person.y, person.radius, 0, Math.PI * 2);
+    context.fillStyle = person.color;
+    context.fill();
+    context.lineWidth = 5;
+    context.strokeStyle = "#263238";
+    context.stroke();
+    context.beginPath();
+    context.arc(person.x, person.y + person.radius + 24, person.radius * 1.2, Math.PI, 0);
+    context.fill();
+    context.stroke();
+  });
+}
+
+function drawHeart(context, x, y, size, color) {
+  context.save();
+  context.beginPath();
+  context.moveTo(x, y + size * 0.36);
+  context.bezierCurveTo(x - size, y - size * 0.24, x - size * 0.5, y - size * 0.82, x, y - size * 0.35);
+  context.bezierCurveTo(x + size * 0.5, y - size * 0.82, x + size, y - size * 0.24, x, y + size * 0.36);
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function drawFrameLabel(context, x, y, text, maxWidth, background) {
+  context.save();
+  const paddingX = 24;
+  const boxHeight = 62;
+  let fontSize = 36;
+  do {
+    context.font = `900 ${fontSize}px Segoe UI, Arial, sans-serif`;
+    fontSize -= 2;
+  } while (context.measureText(text).width > maxWidth - paddingX * 2 && fontSize > 22);
+
+  const textWidth = Math.min(context.measureText(text).width + paddingX * 2, maxWidth);
+  const left = x - textWidth / 2;
+  const top = y - boxHeight / 2;
+  drawRoundedRect(context, left, top, textWidth, boxHeight, 12, background, "#263238", 6);
+  context.fillStyle = "#263238";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(text, x, y + 1, maxWidth - paddingX * 2);
+  context.restore();
+}
+
+function drawRoundedRect(context, x, y, width, height, radius, fill, stroke, lineWidth) {
+  context.save();
+  context.beginPath();
+  context.moveTo(x + radius, y);
+  context.lineTo(x + width - radius, y);
+  context.quadraticCurveTo(x + width, y, x + width, y + radius);
+  context.lineTo(x + width, y + height - radius);
+  context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  context.lineTo(x + radius, y + height);
+  context.quadraticCurveTo(x, y + height, x, y + height - radius);
+  context.lineTo(x, y + radius);
+  context.quadraticCurveTo(x, y, x + radius, y);
+  context.closePath();
+  context.fillStyle = fill;
+  context.fill();
+  context.lineWidth = lineWidth;
+  context.strokeStyle = stroke;
+  context.stroke();
+  context.restore();
 }
 
 function drawStar(context, x, y, outerRadius, innerRadius, color) {

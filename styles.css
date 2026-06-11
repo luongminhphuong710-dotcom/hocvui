@@ -871,6 +871,40 @@ h3 {
   background: linear-gradient(135deg, #ff7a7a 0 22%, #ffd166 22% 44%, #78d6b6 44% 66%, #6bb8ff 66% 100%);
 }
 
+.preview-princess {
+  background:
+    radial-gradient(circle at 50% 22%, #ffd166 0 11px, transparent 12px),
+    linear-gradient(135deg, #ffd7ef 0 32%, #fff1b8 32% 58%, #f6d9ff 58% 100%);
+}
+
+.preview-kitty {
+  background:
+    radial-gradient(circle at 24% 24%, #ffffff 0 10px, transparent 11px),
+    radial-gradient(circle at 76% 24%, #ffffff 0 10px, transparent 11px),
+    linear-gradient(135deg, #ffd7ef, #ffffff 54%, #ffb3d1);
+}
+
+.preview-superhero {
+  background:
+    linear-gradient(135deg, transparent 34%, #ffd166 35% 49%, transparent 50%),
+    linear-gradient(90deg, #ff7a7a 0 25%, #6bb8ff 25% 75%, #263238 75% 100%);
+}
+
+.preview-family {
+  background:
+    radial-gradient(circle at 25% 30%, #ffd166 0 7px, transparent 8px),
+    radial-gradient(circle at 50% 28%, #78d6b6 0 7px, transparent 8px),
+    radial-gradient(circle at 75% 30%, #ff7a7a 0 7px, transparent 8px),
+    #fff8dd;
+}
+
+.preview-love {
+  background:
+    radial-gradient(circle at 35% 36%, #ff7a7a 0 10px, transparent 11px),
+    radial-gradient(circle at 65% 36%, #ff7a7a 0 10px, transparent 11px),
+    linear-gradient(135deg, #ffe4e7, #fff1b8);
+}
+
 .preview-stars {
   background:
     linear-gradient(45deg, transparent 35%, #ffd166 36% 42%, transparent 43%),
@@ -1019,6 +1053,177 @@ h3 {
     inset 0 0 0 24px #ffd166,
     inset 0 0 0 36px #78d6b6,
     inset 0 0 0 48px #6bb8ff;
+}
+
+.frame-princess {
+  box-shadow:
+    inset 0 0 0 18px #ffd7ef,
+    inset 0 0 0 30px #ffd166,
+    inset 0 0 0 42px #f6d9ff;
+}
+
+.frame-princess::before {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 122px;
+  height: 66px;
+  background: #ffd166;
+  clip-path: polygon(0 100%, 15% 28%, 34% 68%, 50% 0, 66% 68%, 85% 28%, 100% 100%);
+  content: "";
+  transform: translateX(-50%);
+}
+
+.frame-princess::after {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 74px;
+  aspect-ratio: 1;
+  background: #ff7a7a;
+  clip-path: polygon(50% 0, 60% 36%, 98% 36%, 68% 57%, 79% 92%, 50% 72%, 21% 92%, 32% 57%, 2% 36%, 40% 36%);
+  content: "";
+}
+
+.frame-kitty {
+  box-shadow:
+    inset 0 0 0 18px #ffffff,
+    inset 0 0 0 32px #ffb3d1,
+    inset 0 0 0 44px #ffd7ef;
+}
+
+.frame-kitty::before {
+  position: absolute;
+  top: 12px;
+  left: 28px;
+  width: calc(100% - 56px);
+  height: 72px;
+  background:
+    linear-gradient(135deg, #ffffff 0 38%, transparent 39%) left top / 90px 72px no-repeat,
+    linear-gradient(225deg, #ffffff 0 38%, transparent 39%) right top / 90px 72px no-repeat;
+  content: "";
+}
+
+.frame-kitty::after {
+  position: absolute;
+  top: 28px;
+  right: 42px;
+  width: 92px;
+  height: 54px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #ff7a7a 0 12px, transparent 13px),
+    radial-gradient(circle at 24% 50%, #ff7a7a 0 24px, transparent 25px),
+    radial-gradient(circle at 76% 50%, #ff7a7a 0 24px, transparent 25px);
+  content: "";
+}
+
+.frame-superhero {
+  box-shadow:
+    inset 0 0 0 18px #263238,
+    inset 0 0 0 34px #ff7a7a,
+    inset 0 0 0 50px #6bb8ff;
+}
+
+.frame-superhero::before {
+  position: absolute;
+  top: 22px;
+  left: 26px;
+  width: 78px;
+  height: 118px;
+  background: #ffd166;
+  clip-path: polygon(54% 0, 22% 45%, 48% 45%, 30% 100%, 78% 36%, 51% 36%);
+  content: "";
+}
+
+.frame-superhero::after {
+  position: absolute;
+  right: 22px;
+  bottom: 24px;
+  min-width: 176px;
+  padding: 0.45rem 0.65rem;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  background: #ffd166;
+  color: var(--ink);
+  content: "Bé siêu nhân";
+  font-weight: 900;
+  text-align: center;
+}
+
+.frame-family {
+  box-shadow:
+    inset 0 0 0 18px #fff8dd,
+    inset 0 0 0 32px #78d6b6,
+    inset 0 0 0 44px #ffd166;
+}
+
+.frame-family::before {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  width: 160px;
+  height: 56px;
+  background:
+    radial-gradient(circle at 22% 26%, #ffd166 0 15px, transparent 16px),
+    radial-gradient(circle at 50% 18%, #ff7a7a 0 17px, transparent 18px),
+    radial-gradient(circle at 78% 26%, #6bb8ff 0 15px, transparent 16px);
+  content: "";
+}
+
+.frame-family::after {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  min-width: min(72%, 430px);
+  padding: 0.55rem 0.8rem;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  content: "Gia đình mình vui nhất";
+  font-weight: 900;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.frame-love {
+  box-shadow:
+    inset 0 0 0 18px #ffe4e7,
+    inset 0 0 0 32px #ff7a7a,
+    inset 0 0 0 44px #fff1b8;
+}
+
+.frame-love::before {
+  position: absolute;
+  width: 78px;
+  height: 70px;
+  background:
+    radial-gradient(circle at 30% 30%, #ff7a7a 0 22px, transparent 23px),
+    radial-gradient(circle at 70% 30%, #ff7a7a 0 22px, transparent 23px),
+    linear-gradient(45deg, #ff7a7a 0 50%, transparent 51%) 23px 26px / 34px 34px no-repeat;
+  content: "";
+}
+
+.frame-love::before {
+  top: 24px;
+  left: 28px;
+}
+
+.frame-love::after {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  min-width: min(58%, 320px);
+  padding: 0.55rem 0.8rem;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--ink);
+  content: "Yêu cả nhà";
+  font-weight: 900;
+  text-align: center;
+  transform: translateX(-50%);
 }
 
 .frame-stars {
