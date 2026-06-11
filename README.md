@@ -8,7 +8,7 @@ Mở file `index.html` bằng trình duyệt.
 
 ## Cấu trúc trang
 
-- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Mỗi lớp/môn hiện có 5 bài học và câu hỏi luyện tập.
+- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng lộ trình SGK, danh sách bài học, video bài giảng và bài tập. Mỗi lớp/môn hiện có 5 bài học và câu hỏi luyện tập.
 - `giai-tri.html`: Trang Giải trí, có Giải đố, Mini game, Game khác và video truyện cổ tích.
 - `chup-anh-vui.html`: Trang Chụp ảnh vui, có photobooth dùng camera trước, chọn khung và tải ảnh PNG. Khung gồm công chúa, mèo nơ hồng, siêu nhân, gia đình và yêu cả nhà.
 - `ban-tin.html`: Trang Bản tin, có bài tin ngắn và mẹo học tập hay.

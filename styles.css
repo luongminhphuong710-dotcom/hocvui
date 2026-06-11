@@ -334,10 +334,112 @@ h3 {
   padding-bottom: 2rem;
 }
 
+.roadmap-band,
+.video-lessons-band,
+.exercise-band {
+  padding: 2rem 0;
+  border-top: 1px solid rgba(217, 226, 231, 0.78);
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.roadmap-card {
+  display: grid;
+  gap: 0.45rem;
+  min-height: 174px;
+  padding: 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 4px 4px 0 rgba(38, 50, 56, 0.12);
+}
+
+.roadmap-card:hover,
+.roadmap-card:focus-visible,
+.roadmap-card.is-active {
+  background: #fff1b8;
+  outline: none;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--mint);
+}
+
+.roadmap-card span {
+  color: #29705e;
+  font-size: 0.84rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.roadmap-card strong {
+  font-size: 1rem;
+  line-height: 1.24;
+}
+
+.roadmap-card em {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.grade-route {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: #f8fcff;
+  box-shadow: var(--shadow);
+}
+
+.route-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.route-head span {
+  padding: 0.42rem 0.7rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--sun);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.route-steps {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.route-steps span {
+  min-height: 58px;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  font-weight: 800;
+}
+
+.route-steps span.is-current {
+  border: 2px solid var(--ink);
+  background: #eafadf;
+}
+
 .lesson-panel,
 .lesson-stage,
 .quiz-card,
 .video-card,
+.exercise-panel,
 .game-card,
 .story-card {
   border: 2px solid var(--ink);
@@ -522,6 +624,81 @@ h3 {
 .video-card {
   display: grid;
   gap: 0.9rem;
+}
+
+.video-learning-grid,
+.exercise-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.video-lesson-list,
+.exercise-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.video-lesson-item,
+.exercise-item {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.8rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 4px 4px 0 rgba(38, 50, 56, 0.12);
+}
+
+.video-lesson-item.is-active,
+.exercise-item.is-current {
+  background: #fff1b8;
+}
+
+.video-lesson-item button {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.video-lesson-item span,
+.exercise-item span {
+  color: #29705e;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.video-lesson-item strong,
+.exercise-item strong {
+  font-size: 1rem;
+  line-height: 1.28;
+}
+
+.video-lesson-item em,
+.exercise-item em {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.video-lesson-item a {
+  justify-self: start;
+  color: #1f5f91;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.exercise-panel {
+  padding: 1rem;
 }
 
 .video-frame {
@@ -1371,6 +1548,10 @@ h3 {
   .intro-band,
   .learn-grid,
   .practice-area,
+  .roadmap-grid,
+  .route-steps,
+  .video-learning-grid,
+  .exercise-grid,
   .play-grid,
   .story-grid,
   .play-grid.two-col,
@@ -1397,6 +1578,11 @@ h3 {
   }
 
   .page-title-band {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .route-head {
     align-items: flex-start;
     flex-direction: column;
   }

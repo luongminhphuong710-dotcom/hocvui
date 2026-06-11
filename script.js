@@ -499,6 +499,90 @@ Object.entries(extraLessonBank).forEach(([subjectKey, gradeGroups]) => {
   });
 });
 
+const sgkRoadmapBank = {
+  math: {
+    1: {
+      focus: "Số trong phạm vi 20, cộng trừ nhỏ, hình quen thuộc.",
+      outcome: "Đếm đúng, tính bước đầu, nhận biết hình quanh em.",
+      route: ["Làm quen số", "Cộng trừ trong 10", "Số 11-20", "Hình học trực quan", "Ôn luyện"],
+    },
+    2: {
+      focus: "Số đến 100, cộng trừ có nhớ, bảng nhân chia đầu tiên.",
+      outcome: "Tính nhẩm tốt hơn, đọc đo lường đơn giản.",
+      route: ["Số đến 100", "Cộng trừ có nhớ", "Bảng nhân 2 và 5", "Đo lường", "Bài toán lời văn"],
+    },
+    3: {
+      focus: "Nhân chia, thời gian, chu vi, tiền Việt Nam, phân số mở đầu.",
+      outcome: "Giải bài toán nhiều bước ngắn và vận dụng đời sống.",
+      route: ["Bảng nhân chia", "Thời gian", "Chu vi", "Tiền Việt Nam", "Phân số mở đầu"],
+    },
+    4: {
+      focus: "Phân số, góc, đường thẳng, diện tích và giải toán có lời văn.",
+      outcome: "Biết phân tích đề, tính toán với phân số cơ bản.",
+      route: ["Phân số", "Góc và đường thẳng", "Cộng trừ phân số", "Diện tích", "Toán lời văn"],
+    },
+    5: {
+      focus: "Số thập phân, phần trăm, diện tích, thể tích và ôn chuyển cấp.",
+      outcome: "Tự tin tính toán, đọc dữ liệu và giải toán tổng hợp.",
+      route: ["Số thập phân", "Tỉ số phần trăm", "Diện tích", "Thể tích", "Ôn tổng hợp"],
+    },
+  },
+  vietnamese: {
+    1: {
+      focus: "Âm, vần, tiếng, câu ngắn và nghe viết đơn giản.",
+      outcome: "Đọc rõ tiếng, hiểu câu ngắn, viết đúng chữ quen thuộc.",
+      route: ["Âm và chữ", "Vần quen thuộc", "Đọc tiếng", "Câu ngắn", "Nghe viết"],
+    },
+    2: {
+      focus: "Từ chỉ sự vật, hoạt động, câu hỏi và đọc hiểu đoạn ngắn.",
+      outcome: "Đọc hiểu tốt hơn, đặt câu rõ ý.",
+      route: ["Từ chỉ sự vật", "Câu giới thiệu", "Từ chỉ hoạt động", "Câu hỏi", "Đọc hiểu"],
+    },
+    3: {
+      focus: "Từ chỉ đặc điểm, so sánh, câu Ai làm gì, viết đoạn văn.",
+      outcome: "Viết đoạn 4-5 câu có ý chính và dùng từ sinh động.",
+      route: ["Từ chỉ đặc điểm", "So sánh", "Câu Ai làm gì", "Từ trái nghĩa", "Viết đoạn"],
+    },
+    4: {
+      focus: "Danh từ, động từ, tính từ, dấu câu, kể chuyện và miêu tả.",
+      outcome: "Biết quan sát, kể và tả theo bố cục rõ ràng.",
+      route: ["Danh từ động từ", "Tính từ", "Dấu câu", "Tả cây", "Kể chuyện"],
+    },
+    5: {
+      focus: "Từ đồng nghĩa, câu ghép, liên kết câu, lập dàn ý, tả người.",
+      outcome: "Viết bài có bố cục, câu văn liên kết và dùng từ chọn lọc.",
+      route: ["Từ đồng nghĩa", "Liên kết câu", "Câu ghép", "Lập dàn ý", "Tả người"],
+    },
+  },
+  english: {
+    1: {
+      focus: "Chào hỏi, màu sắc, số đếm, lệnh lớp học và đồ chơi.",
+      outcome: "Nghe nói từ/câu rất ngắn về bản thân và lớp học.",
+      route: ["Hello", "Colors", "Numbers", "Classroom commands", "Toys"],
+    },
+    2: {
+      focus: "Gia đình, đồ dùng học tập, cơ thể, cảm xúc và thời tiết.",
+      outcome: "Nói câu mẫu ngắn về người thân và đồ vật quen thuộc.",
+      route: ["Family", "School things", "Feelings", "Body parts", "Weather"],
+    },
+    3: {
+      focus: "Giới thiệu bản thân, động vật, hành động, sở thích và phòng trong nhà.",
+      outcome: "Hỏi đáp ngắn, đọc hiểu câu đơn giản.",
+      route: ["Introduce", "Animals", "Actions", "Hobbies", "Rooms"],
+    },
+    4: {
+      focus: "Thói quen, nơi chốn, món ăn, thời gian và chỉ đường.",
+      outcome: "Nói về lịch sinh hoạt, hỏi giờ và hỏi đường ngắn.",
+      route: ["Daily routines", "Places", "Food", "Time", "Directions"],
+    },
+    5: {
+      focus: "Đọc truyện ngắn, quá khứ đơn, câu lịch sự, dự định và so sánh.",
+      outcome: "Đọc đoạn ngắn, nói dự định và so sánh đơn giản.",
+      route: ["Reading", "Past simple", "Helpful sentences", "Future plans", "Comparatives"],
+    },
+  },
+};
+
 const stories = [
   {
     title: "Cây tre trăm đốt",
@@ -675,6 +759,8 @@ const dom = {
   lessonTitle: document.querySelector("#lessonTitle"),
   lessonSummary: document.querySelector("#lessonSummary"),
   visualStrip: document.querySelector("#visualStrip"),
+  sgkRoadmap: document.querySelector("#sgkRoadmap"),
+  gradeRoute: document.querySelector("#gradeRoute"),
   quizBadge: document.querySelector("#quizBadge"),
   quizProgress: document.querySelector("#quizProgress"),
   quizQuestion: document.querySelector("#quizQuestion"),
@@ -683,6 +769,9 @@ const dom = {
   lessonVideo: document.querySelector("#lessonVideo"),
   videoTitle: document.querySelector("#videoTitle"),
   videoLink: document.querySelector("#videoLink"),
+  videoLessonList: document.querySelector("#videoLessonList"),
+  exerciseTitle: document.querySelector("#exerciseTitle"),
+  exerciseList: document.querySelector("#exerciseList"),
   nextLessonBtn: document.querySelector("#nextLessonBtn"),
   starCount: document.querySelector("#starCount"),
   doneCount: document.querySelector("#doneCount"),
@@ -735,6 +824,10 @@ function youtubeEmbed(id) {
 
 function youtubeWatch(id) {
   return `https://www.youtube.com/watch?v=${id}`;
+}
+
+function youtubeSearch(query) {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
 }
 
 function renderGradePicker() {
@@ -822,9 +915,100 @@ function renderLesson() {
   });
 
   dom.lessonVideo.src = youtubeEmbed(video.id);
-  dom.videoTitle.textContent = video.title;
+  dom.videoTitle.textContent = `${lessonData.title} - ${video.title}`;
   dom.videoLink.href = youtubeWatch(video.id);
   renderQuiz();
+}
+
+function renderSgkRoadmap() {
+  if (!dom.sgkRoadmap || !dom.gradeRoute) return;
+
+  const subject = subjects[state.subject];
+  dom.sgkRoadmap.innerHTML = "";
+  Object.entries(sgkRoadmapBank[state.subject]).forEach(([grade, item]) => {
+    const gradeNumber = Number(grade);
+    const button = document.createElement("button");
+    button.className = `roadmap-card${gradeNumber === state.grade ? " is-active" : ""}`;
+    button.type = "button";
+    button.innerHTML = `
+      <span>Lớp ${gradeNumber}</span>
+      <strong>${item.focus}</strong>
+      <em>${item.outcome}</em>
+    `;
+    button.addEventListener("click", () => {
+      state.grade = gradeNumber;
+      state.lessonIndex = 0;
+      state.quizIndex = 0;
+      renderLearning();
+    });
+    dom.sgkRoadmap.append(button);
+  });
+
+  const current = sgkRoadmapBank[state.subject][state.grade];
+  dom.gradeRoute.innerHTML = `
+    <div class="route-head">
+      <div>
+        <p class="eyebrow">${subject.label} lớp ${state.grade}</p>
+        <h3>Lộ trình trong năm</h3>
+      </div>
+      <span>${current.route.length} chặng</span>
+    </div>
+    <div class="route-steps">
+      ${current.route
+        .map((step, index) => `<span class="${index === state.lessonIndex ? "is-current" : ""}">${index + 1}. ${step}</span>`)
+        .join("")}
+    </div>
+  `;
+}
+
+function renderVideoLessonList() {
+  if (!dom.videoLessonList) return;
+
+  const subject = subjects[state.subject];
+  const baseVideo = videoByGrade[state.subject][state.grade];
+  dom.videoLessonList.innerHTML = "";
+  currentLessons().forEach((lessonData, index) => {
+    const item = document.createElement("article");
+    item.className = `video-lesson-item${index === state.lessonIndex ? " is-active" : ""}`;
+    const query = `${subject.label} lớp ${state.grade} ${lessonData.title} bài giảng`;
+    item.innerHTML = `
+      <button type="button">
+        <span>Video ${index + 1}</span>
+        <strong>${lessonData.title}</strong>
+        <em>${baseVideo.title}</em>
+      </button>
+      <a href="${youtubeSearch(query)}" target="_blank" rel="noreferrer">Tìm thêm</a>
+    `;
+    item.querySelector("button").addEventListener("click", () => {
+      state.lessonIndex = index;
+      state.quizIndex = 0;
+      renderLearning();
+    });
+    dom.videoLessonList.append(item);
+  });
+}
+
+function renderExerciseList() {
+  if (!dom.exerciseList) return;
+
+  const lessonData = currentLesson();
+  if (dom.exerciseTitle) dom.exerciseTitle.textContent = lessonData.title;
+  dom.exerciseList.innerHTML = "";
+  lessonData.quiz.forEach((quiz, index) => {
+    const item = document.createElement("article");
+    item.className = `exercise-item${index === state.quizIndex ? " is-current" : ""}`;
+    item.innerHTML = `
+      <span>Câu ${index + 1}</span>
+      <strong>${quiz.question}</strong>
+      <em>${quiz.answers.length} lựa chọn</em>
+    `;
+    item.addEventListener("click", () => {
+      state.quizIndex = index;
+      renderQuiz();
+      renderExerciseList();
+    });
+    dom.exerciseList.append(item);
+  });
 }
 
 function renderQuiz() {
@@ -867,6 +1051,7 @@ function checkAnswer(button, answer, correct) {
     const quizLength = currentLesson().quiz.length;
     state.quizIndex = (state.quizIndex + 1) % quizLength;
     renderQuiz();
+    renderExerciseList();
   }, 1200);
 }
 
@@ -880,8 +1065,11 @@ function saveProgress() {
 function renderLearning() {
   renderGradePicker();
   renderSubjectPicker();
+  renderSgkRoadmap();
   renderLessonList();
   renderLesson();
+  renderVideoLessonList();
+  renderExerciseList();
 }
 
 function setupNextLesson() {
