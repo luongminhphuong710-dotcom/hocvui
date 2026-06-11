@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giải trí - Vui Học Tiểu Học</title>
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Về trang học">
+        <span class="brand-mark" aria-hidden="true">VH</span>
+        <span>Vui Học</span>
+      </a>
+      <nav class="topnav" aria-label="Trang chính">
+        <a href="index.html">Học</a>
+        <a class="is-active" href="giai-tri.html">Giải trí</a>
+        <a href="ban-tin.html">Bản tin</a>
+      </nav>
+    </header>
+
+    <main class="page-shell">
+      <section class="page-title-band">
+        <div>
+          <p class="eyebrow">Nghỉ vui</p>
+          <h1>Giải trí thông minh.</h1>
+          <p class="intro-text">Chọn giải đố, mini game hoặc game khác để bé thư giãn nhẹ nhàng.</p>
+        </div>
+        <div class="stat-row" aria-label="Tiến bộ">
+          <span><strong id="starCount">0</strong> sao</span>
+          <span><strong id="doneCount">0</strong> lượt đúng</span>
+        </div>
+      </section>
+
+      <section class="play-band" aria-label="Góc giải trí">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Danh mục</p>
+            <h2>Bé muốn chơi gì?</h2>
+          </div>
+        </div>
+
+        <div class="category-tabs" id="playTabs" aria-label="Chọn loại giải trí">
+          <button class="is-active" type="button" data-play-filter="riddles">Giải đố</button>
+          <button type="button" data-play-filter="mini">Mini game</button>
+          <button type="button" data-play-filter="other">Game khác</button>
+        </div>
+
+        <section class="play-panel is-active" data-play-panel="riddles" aria-label="Giải đố">
+          <div class="play-grid two-col">
+            <article class="game-card" aria-label="Câu đố vui">
+              <div class="game-head">
+                <div>
+                  <p class="eyebrow">Giải đố</p>
+                  <h3>Nghĩ nhanh</h3>
+                </div>
+                <button class="small-btn" id="newRiddleBtn" type="button">Câu mới</button>
+              </div>
+              <p class="riddle-text" id="riddleText"></p>
+              <div class="answer-grid compact" id="riddleAnswers"></div>
+              <p class="feedback" id="riddleFeedback" aria-live="polite"></p>
+            </article>
+
+            <article class="game-card soft-card" aria-label="Luật chơi">
+              <p class="eyebrow">Gợi ý</p>
+              <h3>Đọc chậm, chọn nhanh.</h3>
+              <p class="card-copy">Mỗi câu đúng được thêm sao. Nếu sai, bé xem đáp án rồi thử câu mới nhé.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="play-panel" data-play-panel="mini" aria-label="Mini game">
+          <div class="play-grid two-col">
+            <article class="game-card" aria-label="Game lật thẻ">
+              <div class="game-head">
+                <div>
+                  <p class="eyebrow">Mini game</p>
+                  <h3>Lật cặp đôi</h3>
+                </div>
+                <button class="small-btn" id="resetMemoryBtn" type="button">Chơi lại</button>
+              </div>
+              <div class="memory-grid" id="memoryGrid"></div>
+              <p class="feedback" id="memoryFeedback" aria-live="polite"></p>
+            </article>
+
+            <article class="game-card" aria-label="Game chọn màu">
+              <div class="game-head">
+                <div>
+                  <p class="eyebrow">Mini game</p>
+                  <h3>Chọn màu</h3>
+                </div>
+                <button class="small-btn" id="newColorBtn" type="button">Lượt mới</button>
+              </div>
+              <p class="riddle-text" id="colorPrompt"></p>
+              <div class="color-options" id="colorOptions"></div>
+              <p class="feedback" id="colorFeedback" aria-live="polite"></p>
+            </article>
+          </div>
+        </section>
+
+        <section class="play-panel" data-play-panel="other" aria-label="Các game khác">
+          <div class="play-grid two-col">
+            <article class="game-card" aria-label="Nhiệm vụ sáng tạo">
+              <div class="game-head">
+                <div>
+                  <p class="eyebrow">Game khác</p>
+                  <h3>Hộp nhiệm vụ</h3>
+                </div>
+                <button class="small-btn" id="missionBtn" type="button">Bốc thăm</button>
+              </div>
+              <p class="mission-text" id="missionText"></p>
+              <div class="mission-meter" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </article>
+
+            <article class="game-card soft-card" aria-label="Game vận động">
+              <p class="eyebrow">Game khác</p>
+              <h3>Vận động 30 giây</h3>
+              <p class="card-copy">Đứng dậy, vỗ tay 10 lần, xoay vai nhẹ và nói một điều con thích hôm nay.</p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="story-band" aria-label="Video truyện cổ tích">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Thư giãn</p>
+            <h2>Video truyện cổ tích</h2>
+          </div>
+        </div>
+        <div class="story-grid" id="storyGrid"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

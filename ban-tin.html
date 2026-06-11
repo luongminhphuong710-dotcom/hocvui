@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bản tin - Vui Học Tiểu Học</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Về trang học">
+        <span class="brand-mark" aria-hidden="true">VH</span>
+        <span>Vui Học</span>
+      </a>
+      <nav class="topnav" aria-label="Trang chính">
+        <a href="index.html">Học</a>
+        <a href="giai-tri.html">Giải trí</a>
+        <a class="is-active" href="ban-tin.html">Bản tin</a>
+      </nav>
+    </header>
+
+    <main class="page-shell">
+      <section class="page-title-band news-title">
+        <div>
+          <p class="eyebrow">Bản tin nhỏ</p>
+          <h1>Tin vui và mẹo học hay.</h1>
+          <p class="intro-text">Góc đọc nhanh cho ba mẹ và bé: tin học tập, thói quen tốt, mẹo học nhẹ nhàng.</p>
+        </div>
+      </section>
+
+      <section class="news-layout" aria-label="Bản tin học tập">
+        <div>
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Tin tức</p>
+              <h2>Bài tin ngắn</h2>
+            </div>
+          </div>
+          <div class="news-grid" id="newsGrid"></div>
+        </div>
+
+        <aside class="tips-panel" aria-label="Mẹo học tập">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Mẹo hay</p>
+              <h2>Học nhẹ hơn</h2>
+            </div>
+          </div>
+          <div class="tip-list" id="tipsGrid"></div>
+        </aside>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

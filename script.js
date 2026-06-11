@@ -359,6 +359,89 @@ const missions = [
   "Kể tên 5 màu em nhìn thấy.",
 ];
 
+const colorGames = [
+  {
+    prompt: "Chọn ô màu xanh dương.",
+    answer: "Xanh dương",
+    options: [
+      { label: "Xanh dương", color: "#6bb8ff" },
+      { label: "Vàng", color: "#ffd166" },
+      { label: "Hồng", color: "#ffb3b3" },
+      { label: "Xanh lá", color: "#83c45e" },
+    ],
+  },
+  {
+    prompt: "Chọn ô màu vàng.",
+    answer: "Vàng",
+    options: [
+      { label: "Đỏ", color: "#ff7a7a" },
+      { label: "Vàng", color: "#ffd166" },
+      { label: "Tím", color: "#9a7bd8" },
+      { label: "Xanh lá", color: "#83c45e" },
+    ],
+  },
+  {
+    prompt: "Chọn ô màu xanh lá.",
+    answer: "Xanh lá",
+    options: [
+      { label: "Xanh lá", color: "#83c45e" },
+      { label: "Cam", color: "#ffb15e" },
+      { label: "Xanh dương", color: "#6bb8ff" },
+      { label: "Hồng", color: "#ffb3b3" },
+    ],
+  },
+];
+
+const newsArticles = [
+  {
+    icon: "Đọc",
+    tag: "Tin học tập",
+    time: "3 phút đọc",
+    title: "Đọc 10 phút mỗi ngày giúp bé nhớ từ tốt hơn",
+    text: "Ba mẹ có thể chọn một đoạn ngắn, đọc cùng bé và hỏi một câu thật dễ sau khi đọc.",
+  },
+  {
+    icon: "Toán",
+    tag: "Hoạt động",
+    time: "2 phút đọc",
+    title: "Học toán bằng đồ vật quanh nhà",
+    text: "Nắp chai, bút màu, hạt đậu có thể biến thành giáo cụ để bé đếm, cộng, trừ và so sánh.",
+  },
+  {
+    icon: "Anh",
+    tag: "Tiếng Anh",
+    time: "2 phút đọc",
+    title: "Mỗi ngày 3 từ tiếng Anh là vừa đủ",
+    text: "Học ít nhưng đều giúp bé bớt áp lực. Hãy gắn từ mới với tranh, màu sắc hoặc đồ vật thật.",
+  },
+  {
+    icon: "Vui",
+    tag: "Thói quen",
+    time: "4 phút đọc",
+    title: "Nghỉ ngắn giúp giờ học vui hơn",
+    text: "Sau 15 đến 20 phút tập trung, bé nên đứng dậy, uống nước hoặc chơi một mini game nhẹ.",
+  },
+];
+
+const studyTips = [
+  {
+    title: "Học theo phiên ngắn",
+    text: "15 phút học, 5 phút nghỉ. Nhịp này hợp với nhiều bé tiểu học.",
+  },
+  {
+    title: "Khen đúng việc",
+    text: "Thay vì chỉ nói giỏi quá, hãy khen: con đọc rõ, con thử lại rất tốt.",
+  },
+  {
+    title: "Dùng câu hỏi nhỏ",
+    text: "Một bài học chỉ cần 2 đến 3 câu hỏi vui để bé nhớ ý chính.",
+  },
+  {
+    title: "Đổi vai giáo viên",
+    text: "Cho bé giảng lại bằng lời của mình. Khi dạy lại, bé nhớ lâu hơn.",
+  },
+];
+
 const state = {
   grade: 1,
   subject: "math",
@@ -370,6 +453,7 @@ const state = {
   memoryDone: new Set(),
   memoryBusy: false,
   riddleIndex: 0,
+  colorIndex: 0,
 };
 
 const dom = {
@@ -402,7 +486,14 @@ const dom = {
   newRiddleBtn: document.querySelector("#newRiddleBtn"),
   missionText: document.querySelector("#missionText"),
   missionBtn: document.querySelector("#missionBtn"),
+  playTabs: document.querySelector("#playTabs"),
+  colorPrompt: document.querySelector("#colorPrompt"),
+  colorOptions: document.querySelector("#colorOptions"),
+  colorFeedback: document.querySelector("#colorFeedback"),
+  newColorBtn: document.querySelector("#newColorBtn"),
   storyGrid: document.querySelector("#storyGrid"),
+  newsGrid: document.querySelector("#newsGrid"),
+  tipsGrid: document.querySelector("#tipsGrid"),
   toast: document.querySelector("#toast"),
 };
 
@@ -558,8 +649,8 @@ function checkAnswer(button, answer, correct) {
 function saveProgress() {
   localStorage.setItem("vh-stars", String(state.stars));
   localStorage.setItem("vh-done", String(state.done));
-  dom.starCount.textContent = state.stars;
-  dom.doneCount.textContent = state.done;
+  if (dom.starCount) dom.starCount.textContent = state.stars;
+  if (dom.doneCount) dom.doneCount.textContent = state.done;
 }
 
 function renderLearning() {
@@ -570,6 +661,8 @@ function renderLearning() {
 }
 
 function setupNextLesson() {
+  if (!dom.nextLessonBtn) return;
+
   dom.nextLessonBtn.addEventListener("click", () => {
     state.lessonIndex = (state.lessonIndex + 1) % currentLessons().length;
     state.quizIndex = 0;
@@ -676,6 +769,8 @@ function renderRiddle() {
 }
 
 function setupRiddles() {
+  if (!dom.newRiddleBtn) return;
+
   dom.newRiddleBtn.addEventListener("click", () => {
     state.riddleIndex = (state.riddleIndex + 1) % riddles.length;
     renderRiddle();
@@ -683,11 +778,74 @@ function setupRiddles() {
 }
 
 function setupMissions() {
+  if (!dom.missionText || !dom.missionBtn) return;
+
   dom.missionText.textContent = missions[0];
   dom.missionBtn.addEventListener("click", () => {
     const mission = missions[Math.floor(Math.random() * missions.length)];
     dom.missionText.textContent = mission;
     showToast("Nhiệm vụ mới đã mở.");
+  });
+}
+
+function setupPlayTabs() {
+  if (!dom.playTabs) return;
+
+  const tabs = [...dom.playTabs.querySelectorAll("[data-play-filter]")];
+  const panels = [...document.querySelectorAll("[data-play-panel]")];
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.playFilter;
+      tabs.forEach((item) => item.classList.toggle("is-active", item === tab));
+      panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.playPanel === target));
+    });
+  });
+}
+
+function renderColorGame() {
+  if (!dom.colorPrompt || !dom.colorOptions) return;
+
+  const game = colorGames[state.colorIndex];
+  dom.colorPrompt.textContent = game.prompt;
+  dom.colorFeedback.textContent = "";
+  dom.colorOptions.innerHTML = "";
+
+  game.options.forEach((option) => {
+    const button = document.createElement("button");
+    button.className = "color-choice";
+    button.type = "button";
+    button.textContent = option.label;
+    button.style.background = option.color;
+    button.addEventListener("click", () => {
+      const isCorrect = option.label === game.answer;
+      button.classList.add(isCorrect ? "is-correct" : "is-wrong");
+      dom.colorFeedback.textContent = isCorrect ? "Đúng màu rồi!" : `Màu đúng là: ${game.answer}`;
+
+      [...dom.colorOptions.querySelectorAll("button")].forEach((item) => {
+        item.disabled = true;
+        if (item.textContent === game.answer) item.classList.add("is-correct");
+      });
+
+      if (isCorrect) {
+        state.stars += 1;
+        state.done += 1;
+        saveProgress();
+      }
+    });
+    dom.colorOptions.append(button);
+  });
+}
+
+function setupColorGame() {
+  if (!dom.colorPrompt || !dom.colorOptions) return;
+
+  renderColorGame();
+  if (!dom.newColorBtn) return;
+
+  dom.newColorBtn.addEventListener("click", () => {
+    state.colorIndex = (state.colorIndex + 1) % colorGames.length;
+    renderColorGame();
   });
 }
 
@@ -718,7 +876,68 @@ function renderStories() {
   });
 }
 
+function renderNews() {
+  if (!dom.newsGrid) return;
+
+  dom.newsGrid.innerHTML = "";
+  newsArticles.forEach((item) => {
+    const article = document.createElement("article");
+    article.className = "news-card";
+
+    const icon = document.createElement("div");
+    icon.className = "news-icon";
+    icon.textContent = item.icon;
+
+    const content = document.createElement("div");
+    const tag = document.createElement("p");
+    tag.className = "eyebrow";
+    tag.textContent = item.tag;
+
+    const title = document.createElement("h3");
+    title.textContent = item.title;
+
+    const text = document.createElement("p");
+    text.textContent = item.text;
+
+    const meta = document.createElement("div");
+    meta.className = "news-meta";
+    [item.time, "Dành cho ba mẹ"].forEach((label) => {
+      const span = document.createElement("span");
+      span.textContent = label;
+      meta.append(span);
+    });
+
+    content.append(tag, title, text, meta);
+    article.append(icon, content);
+    dom.newsGrid.append(article);
+  });
+}
+
+function renderTips() {
+  if (!dom.tipsGrid) return;
+
+  dom.tipsGrid.innerHTML = "";
+  studyTips.forEach((tip, index) => {
+    const article = document.createElement("article");
+    article.className = "tip-card";
+
+    const number = document.createElement("strong");
+    number.textContent = String(index + 1);
+
+    const title = document.createElement("h3");
+    title.textContent = tip.title;
+
+    const text = document.createElement("p");
+    text.textContent = tip.text;
+
+    article.append(number, title, text);
+    dom.tipsGrid.append(article);
+  });
+}
+
 function showToast(message) {
+  if (!dom.toast) return;
+
   dom.toast.textContent = message;
   dom.toast.classList.add("is-showing");
   window.clearTimeout(showToast.timer);
@@ -729,14 +948,28 @@ function showToast(message) {
 
 function init() {
   saveProgress();
-  renderLearning();
-  setupNextLesson();
-  setupMemoryGame();
-  setupRiddles();
-  renderRiddle();
+  if (dom.gradePicker && dom.subjectPicker && dom.lessonList) {
+    renderLearning();
+    setupNextLesson();
+  }
+
+  setupPlayTabs();
+
+  if (dom.memoryGrid) {
+    setupMemoryGame();
+    if (dom.resetMemoryBtn) dom.resetMemoryBtn.addEventListener("click", setupMemoryGame);
+  }
+
+  if (dom.riddleText && dom.riddleAnswers) {
+    setupRiddles();
+    renderRiddle();
+  }
+
+  setupColorGame();
   setupMissions();
-  renderStories();
-  dom.resetMemoryBtn.addEventListener("click", setupMemoryGame);
+  if (dom.storyGrid) renderStories();
+  renderNews();
+  renderTips();
 }
 
 init();
