@@ -800,6 +800,7 @@ const dom = {
   startCameraBtn: document.querySelector("#startCameraBtn"),
   capturePhotoBtn: document.querySelector("#capturePhotoBtn"),
   retakePhotoBtn: document.querySelector("#retakePhotoBtn"),
+  mobilePhotoInput: document.querySelector("#mobilePhotoInput"),
   downloadPhotoLink: document.querySelector("#downloadPhotoLink"),
   boothStatus: document.querySelector("#boothStatus"),
   storyGrid: document.querySelector("#storyGrid"),
@@ -997,15 +998,24 @@ function renderExerciseList() {
   lessonData.quiz.forEach((quiz, index) => {
     const item = document.createElement("article");
     item.className = `exercise-item${index === state.quizIndex ? " is-current" : ""}`;
+    item.setAttribute("role", "button");
+    item.tabIndex = 0;
     item.innerHTML = `
       <span>Câu ${index + 1}</span>
       <strong>${quiz.question}</strong>
       <em>${quiz.answers.length} lựa chọn</em>
     `;
-    item.addEventListener("click", () => {
+    const chooseExercise = () => {
       state.quizIndex = index;
       renderQuiz();
       renderExerciseList();
+    };
+    item.addEventListener("click", chooseExercise);
+    item.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        chooseExercise();
+      }
     });
     dom.exerciseList.append(item);
   });
@@ -1350,16 +1360,65 @@ function captureBoothPhoto() {
   context.scale(-1, 1);
   context.drawImage(video, 0, 0, width, height);
   context.restore();
-  drawBoothFrame(context, width, height, currentBoothFrame());
+  finishBoothCanvas(context, width, height, "Ảnh đã chụp xong.");
+}
 
-  const imageUrl = canvas.toDataURL("image/png");
+function handleMobilePhotoInput(event) {
+  const file = event.target.files?.[0];
+  if (!file || !dom.boothCanvas) return;
+
+  const image = new Image();
+  const imageUrl = URL.createObjectURL(file);
+  image.onload = () => {
+    const canvas = dom.boothCanvas;
+    const width = 1280;
+    const height = 960;
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    drawImageCover(context, image, width, height);
+    finishBoothCanvas(context, width, height, "Ảnh từ điện thoại đã ghép khung.");
+    URL.revokeObjectURL(imageUrl);
+    event.target.value = "";
+  };
+  image.onerror = () => {
+    URL.revokeObjectURL(imageUrl);
+    updateBoothStatus("Chưa đọc được ảnh. Thử chụp lại nhé.");
+  };
+  image.src = imageUrl;
+}
+
+function drawImageCover(context, image, width, height) {
+  const imageRatio = image.naturalWidth / image.naturalHeight;
+  const canvasRatio = width / height;
+  let sourceWidth = image.naturalWidth;
+  let sourceHeight = image.naturalHeight;
+  let sourceX = 0;
+  let sourceY = 0;
+
+  if (imageRatio > canvasRatio) {
+    sourceWidth = image.naturalHeight * canvasRatio;
+    sourceX = (image.naturalWidth - sourceWidth) / 2;
+  } else {
+    sourceHeight = image.naturalWidth / canvasRatio;
+    sourceY = (image.naturalHeight - sourceHeight) / 2;
+  }
+
+  context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+}
+
+function finishBoothCanvas(context, width, height, message) {
+  if (!dom.boothCanvas || !dom.photoPreview || !dom.downloadPhotoLink) return;
+
+  drawBoothFrame(context, width, height, currentBoothFrame());
+  const imageUrl = dom.boothCanvas.toDataURL("image/png");
   dom.photoPreview.src = imageUrl;
   dom.photoPreview.classList.add("has-photo");
   dom.emptyPhoto?.classList.add("is-hidden");
   dom.downloadPhotoLink.href = imageUrl;
   dom.downloadPhotoLink.classList.remove("disabled-link");
   if (dom.retakePhotoBtn) dom.retakePhotoBtn.disabled = false;
-  updateBoothStatus("Ảnh đã chụp xong.");
+  updateBoothStatus(message);
 }
 
 function clearBoothPhoto() {
@@ -1714,6 +1773,7 @@ function setupPhotoBooth() {
   dom.startCameraBtn?.addEventListener("click", startBoothCamera);
   dom.capturePhotoBtn?.addEventListener("click", captureBoothPhoto);
   dom.retakePhotoBtn?.addEventListener("click", clearBoothPhoto);
+  dom.mobilePhotoInput?.addEventListener("change", handleMobilePhotoInput);
   window.addEventListener("beforeunload", stopBoothCamera);
 }
 

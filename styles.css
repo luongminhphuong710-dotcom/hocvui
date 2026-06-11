@@ -34,6 +34,7 @@ body {
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 button {
@@ -648,6 +649,7 @@ h3 {
   border: 2px solid var(--ink);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.94);
+  cursor: pointer;
   box-shadow: 4px 4px 0 rgba(38, 50, 56, 0.12);
 }
 
@@ -1517,6 +1519,26 @@ h3 {
   pointer-events: none;
 }
 
+.mobile-capture-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.85rem;
+}
+
+.mobile-capture-row input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-capture-btn {
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  background: #eafadf;
+}
+
 .toast {
   position: fixed;
   right: 1rem;
@@ -1596,15 +1618,24 @@ h3 {
   .topbar {
     align-items: stretch;
     flex-direction: column;
+    gap: 0.7rem;
   }
 
   .topnav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
+    border-radius: 8px;
   }
 
   .topnav a {
-    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 0;
+    min-height: 46px;
+    padding: 0.62rem 0.35rem;
+    border-radius: 8px;
   }
 
   main {
@@ -1649,6 +1680,37 @@ h3 {
 
   .shutter-button {
     justify-self: center;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .grade-btn,
+  .subject-btn,
+  .answer-btn,
+  .small-btn,
+  .icon-action,
+  .category-tabs button,
+  .color-choice,
+  .frame-option,
+  .roadmap-card,
+  .video-lesson-item,
+  .exercise-item,
+  .memory-card,
+  .text-link {
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+
+  .grade-btn:hover,
+  .subject-btn:hover,
+  .answer-btn:hover,
+  .small-btn:hover,
+  .icon-action:hover,
+  .category-tabs button:hover,
+  .color-choice:hover,
+  .frame-option:hover,
+  .roadmap-card:hover {
+    transform: none;
   }
 }
 

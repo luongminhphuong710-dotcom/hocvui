@@ -14,6 +14,7 @@ Mở file `index.html` bằng trình duyệt.
 - `ban-tin.html`: Trang Bản tin, có bài tin ngắn và mẹo học tập hay.
 
 Trang Chụp ảnh vui cần mở qua `localhost` hoặc HTTPS để trình duyệt cho phép dùng camera. Nếu dùng VS Code, có thể mở bằng Live Server.
+Trên điện thoại, nếu nút bật camera trực tiếp bị trình duyệt chặn, dùng nút `Chụp từ điện thoại` để mở camera/chọn ảnh rồi ghép khung.
 
 ## Chỉnh nội dung
 
