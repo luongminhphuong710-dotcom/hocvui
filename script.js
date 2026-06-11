@@ -637,6 +637,14 @@ const studyTips = [
   },
 ];
 
+const boothFrames = [
+  { key: "rainbow", label: "Cầu vồng", className: "frame-rainbow", previewClass: "preview-rainbow" },
+  { key: "stars", label: "Ngôi sao", className: "frame-stars", previewClass: "preview-stars" },
+  { key: "notebook", label: "Vở ô ly", className: "frame-notebook", previewClass: "preview-notebook" },
+  { key: "garden", label: "Vườn xanh", className: "frame-garden", previewClass: "preview-garden" },
+  { key: "clean", label: "Khung trắng", className: "frame-clean", previewClass: "preview-clean" },
+];
+
 const state = {
   grade: 1,
   subject: "math",
@@ -649,6 +657,7 @@ const state = {
   memoryBusy: false,
   riddleIndex: 0,
   colorIndex: 0,
+  boothFrameKey: "rainbow",
 };
 
 const dom = {
@@ -686,11 +695,26 @@ const dom = {
   colorOptions: document.querySelector("#colorOptions"),
   colorFeedback: document.querySelector("#colorFeedback"),
   newColorBtn: document.querySelector("#newColorBtn"),
+  boothFrameList: document.querySelector("#boothFrameList"),
+  boothFrameOverlay: document.querySelector("#boothFrameOverlay"),
+  boothFrameName: document.querySelector("#boothFrameName"),
+  boothVideo: document.querySelector("#boothVideo"),
+  boothCanvas: document.querySelector("#boothCanvas"),
+  cameraPlaceholder: document.querySelector("#cameraPlaceholder"),
+  photoPreview: document.querySelector("#photoPreview"),
+  emptyPhoto: document.querySelector("#emptyPhoto"),
+  startCameraBtn: document.querySelector("#startCameraBtn"),
+  capturePhotoBtn: document.querySelector("#capturePhotoBtn"),
+  retakePhotoBtn: document.querySelector("#retakePhotoBtn"),
+  downloadPhotoLink: document.querySelector("#downloadPhotoLink"),
+  boothStatus: document.querySelector("#boothStatus"),
   storyGrid: document.querySelector("#storyGrid"),
   newsGrid: document.querySelector("#newsGrid"),
   tipsGrid: document.querySelector("#tipsGrid"),
   toast: document.querySelector("#toast"),
 };
+
+let boothStream = null;
 
 function lesson(title, summary, visuals, quiz) {
   return { title, summary, visuals, quiz };
@@ -1044,6 +1068,241 @@ function setupColorGame() {
   });
 }
 
+function currentBoothFrame() {
+  return boothFrames.find((frame) => frame.key === state.boothFrameKey) || boothFrames[0];
+}
+
+function renderBoothFrames() {
+  if (!dom.boothFrameList) return;
+
+  dom.boothFrameList.innerHTML = "";
+  boothFrames.forEach((frame) => {
+    const button = document.createElement("button");
+    button.className = `frame-option${frame.key === state.boothFrameKey ? " is-active" : ""}`;
+    button.type = "button";
+    button.innerHTML = `<span class="frame-preview ${frame.previewClass}" aria-hidden="true"></span><span>${frame.label}</span>`;
+    button.addEventListener("click", () => {
+      state.boothFrameKey = frame.key;
+      renderBoothFrames();
+      applyBoothFrame();
+      updateBoothStatus(`Đã chọn khung ${frame.label}.`);
+    });
+    dom.boothFrameList.append(button);
+  });
+}
+
+function applyBoothFrame() {
+  if (!dom.boothFrameOverlay) return;
+
+  const frame = currentBoothFrame();
+  dom.boothFrameOverlay.className = `booth-frame ${frame.className}`;
+  if (dom.boothFrameName) dom.boothFrameName.textContent = frame.label;
+}
+
+async function startBoothCamera() {
+  if (!dom.boothVideo) return;
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    updateBoothStatus("Trình duyệt cần localhost hoặc HTTPS để mở camera.");
+    return;
+  }
+
+  try {
+    stopBoothCamera();
+    updateBoothStatus("Đang mở camera...");
+    boothStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        facingMode: "user",
+        width: { ideal: 1280 },
+        height: { ideal: 960 },
+      },
+    });
+    dom.boothVideo.srcObject = boothStream;
+    await dom.boothVideo.play();
+    dom.cameraPlaceholder?.classList.add("is-hidden");
+    if (dom.capturePhotoBtn) dom.capturePhotoBtn.disabled = false;
+    if (dom.startCameraBtn) dom.startCameraBtn.textContent = "Camera bật";
+    updateBoothStatus("Sẵn sàng chụp.");
+  } catch (error) {
+    updateBoothStatus("Chưa mở được camera. Hãy cho phép camera hoặc mở bằng localhost/HTTPS.");
+  }
+}
+
+function stopBoothCamera() {
+  if (!boothStream) return;
+
+  boothStream.getTracks().forEach((track) => track.stop());
+  boothStream = null;
+}
+
+function captureBoothPhoto() {
+  if (!dom.boothVideo || !dom.boothCanvas || !dom.photoPreview || !dom.downloadPhotoLink) return;
+
+  const video = dom.boothVideo;
+  const width = video.videoWidth || 1280;
+  const height = video.videoHeight || 960;
+  if (!video.videoWidth || !video.videoHeight) {
+    updateBoothStatus("Camera chưa sẵn sàng.");
+    return;
+  }
+
+  const canvas = dom.boothCanvas;
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+
+  context.save();
+  context.translate(width, 0);
+  context.scale(-1, 1);
+  context.drawImage(video, 0, 0, width, height);
+  context.restore();
+  drawBoothFrame(context, width, height, currentBoothFrame());
+
+  const imageUrl = canvas.toDataURL("image/png");
+  dom.photoPreview.src = imageUrl;
+  dom.photoPreview.classList.add("has-photo");
+  dom.emptyPhoto?.classList.add("is-hidden");
+  dom.downloadPhotoLink.href = imageUrl;
+  dom.downloadPhotoLink.classList.remove("disabled-link");
+  if (dom.retakePhotoBtn) dom.retakePhotoBtn.disabled = false;
+  updateBoothStatus("Ảnh đã chụp xong.");
+}
+
+function clearBoothPhoto() {
+  if (dom.photoPreview) {
+    dom.photoPreview.removeAttribute("src");
+    dom.photoPreview.classList.remove("has-photo");
+  }
+  dom.emptyPhoto?.classList.remove("is-hidden");
+  if (dom.downloadPhotoLink) {
+    dom.downloadPhotoLink.removeAttribute("href");
+    dom.downloadPhotoLink.classList.add("disabled-link");
+  }
+  if (dom.retakePhotoBtn) dom.retakePhotoBtn.disabled = true;
+  updateBoothStatus("Sẵn sàng chụp ảnh mới.");
+}
+
+function drawBoothFrame(context, width, height, frame) {
+  switch (frame.key) {
+    case "rainbow":
+      drawRainbowFrame(context, width, height);
+      break;
+    case "stars":
+      fillFrameBorder(context, width, height, 68, "#fff1b8");
+      drawStar(context, 82, 82, 42, 18, "#ff7a7a");
+      drawStar(context, width - 82, height - 82, 42, 18, "#6bb8ff");
+      drawStar(context, width - 88, 88, 30, 13, "#78d6b6");
+      drawStar(context, 88, height - 88, 30, 13, "#ffd166");
+      break;
+    case "notebook":
+      fillFrameBorder(context, width, height, 58, "#ffffff");
+      context.strokeStyle = "rgba(107, 184, 255, 0.64)";
+      context.lineWidth = Math.max(2, width * 0.002);
+      for (let y = 100; y < height - 40; y += 58) {
+        context.beginPath();
+        context.moveTo(48, y);
+        context.lineTo(width - 48, y);
+        context.stroke();
+      }
+      context.strokeStyle = "rgba(255, 122, 122, 0.72)";
+      context.lineWidth = Math.max(4, width * 0.004);
+      context.beginPath();
+      context.moveTo(108, 50);
+      context.lineTo(108, height - 50);
+      context.stroke();
+      break;
+    case "garden":
+      fillFrameBorder(context, width, height, 62, "#eafadf");
+      context.fillStyle = "#83c45e";
+      context.fillRect(0, 0, width, 30);
+      context.fillRect(0, height - 30, width, 30);
+      context.fillStyle = "#ffd166";
+      context.fillRect(0, 0, 30, height);
+      context.fillStyle = "#ffb3b3";
+      context.fillRect(width - 30, 0, 30, height);
+      drawLeaf(context, 88, 78, "#78d6b6");
+      drawLeaf(context, width - 88, 78, "#83c45e");
+      drawLeaf(context, 88, height - 78, "#83c45e");
+      drawLeaf(context, width - 88, height - 78, "#78d6b6");
+      break;
+    case "clean":
+    default:
+      fillFrameBorder(context, width, height, 42, "#ffffff");
+      context.strokeStyle = "#263238";
+      context.lineWidth = 12;
+      context.strokeRect(22, 22, width - 44, height - 44);
+      break;
+  }
+}
+
+function drawRainbowFrame(context, width, height) {
+  const colors = ["#ff7a7a", "#ffd166", "#78d6b6", "#6bb8ff"];
+  colors.forEach((color, index) => {
+    const inset = index * 24 + 12;
+    context.strokeStyle = color;
+    context.lineWidth = 24;
+    context.strokeRect(inset, inset, width - inset * 2, height - inset * 2);
+  });
+}
+
+function fillFrameBorder(context, width, height, size, color) {
+  context.fillStyle = color;
+  context.fillRect(0, 0, width, size);
+  context.fillRect(0, height - size, width, size);
+  context.fillRect(0, 0, size, height);
+  context.fillRect(width - size, 0, size, height);
+}
+
+function drawStar(context, x, y, outerRadius, innerRadius, color) {
+  context.save();
+  context.beginPath();
+  for (let index = 0; index < 10; index += 1) {
+    const angle = -Math.PI / 2 + (index * Math.PI) / 5;
+    const radius = index % 2 === 0 ? outerRadius : innerRadius;
+    const pointX = x + Math.cos(angle) * radius;
+    const pointY = y + Math.sin(angle) * radius;
+    if (index === 0) context.moveTo(pointX, pointY);
+    else context.lineTo(pointX, pointY);
+  }
+  context.closePath();
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 6;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function drawLeaf(context, x, y, color) {
+  context.save();
+  context.translate(x, y);
+  context.rotate(-Math.PI / 4);
+  context.beginPath();
+  context.ellipse(0, 0, 36, 18, 0, 0, Math.PI * 2);
+  context.fillStyle = color;
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  context.restore();
+}
+
+function updateBoothStatus(message) {
+  if (dom.boothStatus) dom.boothStatus.textContent = message;
+}
+
+function setupPhotoBooth() {
+  if (!dom.boothFrameList) return;
+
+  renderBoothFrames();
+  applyBoothFrame();
+  dom.startCameraBtn?.addEventListener("click", startBoothCamera);
+  dom.capturePhotoBtn?.addEventListener("click", captureBoothPhoto);
+  dom.retakePhotoBtn?.addEventListener("click", clearBoothPhoto);
+  window.addEventListener("beforeunload", stopBoothCamera);
+}
+
 function renderStories() {
   dom.storyGrid.innerHTML = "";
   stories.forEach((story) => {
@@ -1161,6 +1420,7 @@ function init() {
   }
 
   setupColorGame();
+  setupPhotoBooth();
   setupMissions();
   if (dom.storyGrid) renderStories();
   renderNews();

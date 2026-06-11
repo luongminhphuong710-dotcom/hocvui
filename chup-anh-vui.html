@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chụp ảnh vui - Vui Học Tiểu Học</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Về trang học">
+        <span class="brand-mark" aria-hidden="true">VH</span>
+        <span>Vui Học</span>
+      </a>
+      <nav class="topnav" aria-label="Trang chính">
+        <a href="index.html">Học</a>
+        <a href="giai-tri.html">Giải trí</a>
+        <a class="is-active" href="chup-anh-vui.html">Chụp ảnh</a>
+        <a href="ban-tin.html">Bản tin</a>
+      </nav>
+    </header>
+
+    <main class="page-shell">
+      <section class="page-title-band booth-title">
+        <div>
+          <p class="eyebrow">Photobooth</p>
+          <h1>Chụp ảnh vui.</h1>
+          <p class="intro-text">Bé chọn khung, bật camera trước và bấm chụp.</p>
+        </div>
+      </section>
+
+      <section class="photobooth-layout" aria-label="Chụp ảnh vui">
+        <aside class="frame-panel" aria-label="Danh sách khung ảnh">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Khung ảnh</p>
+              <h2>Chọn khung</h2>
+            </div>
+          </div>
+          <div class="frame-list" id="boothFrameList"></div>
+        </aside>
+
+        <section class="camera-body" aria-label="Máy ảnh">
+          <div class="camera-top">
+            <span class="camera-dot" aria-hidden="true"></span>
+            <span class="camera-label" id="boothFrameName">Cầu vồng</span>
+            <span class="viewfinder-dot" aria-hidden="true"></span>
+          </div>
+
+          <div class="camera-screen">
+            <div class="camera-viewfinder" id="cameraViewfinder">
+              <video id="boothVideo" autoplay playsinline muted></video>
+              <div class="booth-frame frame-rainbow" id="boothFrameOverlay" aria-hidden="true"></div>
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <span class="lens-shape" aria-hidden="true"></span>
+                <strong>Sẵn sàng</strong>
+              </div>
+            </div>
+          </div>
+
+          <canvas id="boothCanvas" width="1280" height="960" hidden></canvas>
+
+          <div class="camera-controls" aria-label="Điều khiển chụp ảnh">
+            <button class="small-btn" id="startCameraBtn" type="button">Bật camera</button>
+            <button class="shutter-button" id="capturePhotoBtn" type="button" title="Chụp ảnh" disabled>
+              <span class="sr-only">Chụp ảnh</span>
+            </button>
+            <button class="small-btn" id="retakePhotoBtn" type="button" disabled>Chụp lại</button>
+          </div>
+
+          <p class="feedback booth-status" id="boothStatus" aria-live="polite">Camera cần mở bằng localhost hoặc HTTPS.</p>
+        </section>
+
+        <aside class="photo-result" aria-label="Ảnh đã chụp">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Ảnh của bé</p>
+              <h2>Kết quả</h2>
+            </div>
+          </div>
+          <div class="photo-preview-box">
+            <img id="photoPreview" alt="Ảnh photobooth đã chụp" />
+            <div class="empty-photo" id="emptyPhoto">
+              <span class="lens-shape small" aria-hidden="true"></span>
+              <strong>Chưa có ảnh</strong>
+            </div>
+          </div>
+          <a class="text-link disabled-link" id="downloadPhotoLink" download="chup-anh-vui.png">Tải ảnh</a>
+        </aside>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
