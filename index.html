@@ -152,6 +152,45 @@
           </aside>
         </div>
       </section>
+
+      <section class="daily-practice-band" aria-label="Bài tập theo ngày và tuần">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Nhiệm vụ học tập</p>
+            <h2>Ngày và tuần</h2>
+          </div>
+          <p class="section-note">Mục tiêu mỗi ngày: 20 câu cho mỗi môn.</p>
+        </div>
+
+        <div class="practice-plan-tabs" id="practicePlanTabs" aria-label="Chọn bài tập ngày hoặc tuần">
+          <button class="is-active" type="button" data-practice-mode="daily">Theo ngày</button>
+          <button type="button" data-practice-mode="weekly">Theo tuần</button>
+        </div>
+
+        <div class="practice-subject-grid" id="practiceSubjectCards"></div>
+        <div class="weekly-plan-board" id="weeklyPlanBoard"></div>
+
+        <div class="practice-session-grid">
+          <article class="practice-session-card" aria-label="Câu hỏi nhiệm vụ">
+            <div class="quiz-topline">
+              <span id="practiceModeLabel">Bài tập ngày</span>
+              <span id="practiceProgressText">0/20</span>
+            </div>
+            <h3 id="practiceQuestion">Chọn môn để bắt đầu.</h3>
+            <div class="answer-grid" id="practiceAnswerGrid"></div>
+            <p class="feedback" id="practiceFeedback" aria-live="polite"></p>
+          </article>
+
+          <article class="certificate-panel" aria-label="Bằng khen online">
+            <div class="certificate-card" id="certificateArea">
+              <p class="eyebrow">Bằng khen online</p>
+              <h3>Hoàn thành nhiệm vụ sẽ nhận bằng khen.</h3>
+              <p>Con làm đủ mục tiêu, bằng khen sẽ sáng lên ở đây.</p>
+            </div>
+            <button class="small-btn" id="printCertificateBtn" type="button" disabled>In / Lưu PDF</button>
+          </article>
+        </div>
+      </section>
     </main>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>

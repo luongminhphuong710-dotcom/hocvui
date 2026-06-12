@@ -583,6 +583,11 @@ const sgkRoadmapBank = {
   },
 };
 
+const DAILY_PRACTICE_GOAL = 20;
+const WEEKLY_PRACTICE_DAYS = 5;
+const WEEKLY_PRACTICE_GOAL = DAILY_PRACTICE_GOAL * WEEKLY_PRACTICE_DAYS;
+const practiceSubjects = ["math", "vietnamese", "english"];
+
 const stories = [
   {
     title: "Cây tre trăm đốt",
@@ -725,6 +730,7 @@ const boothThemePacks = [
   { key: "boys", label: "Con trai", note: "Mạnh mẽ, khám phá" },
   { key: "girls", label: "Con gái", note: "Dịu dàng, lấp lánh" },
   { key: "family", label: "Gia đình", note: "Ấm áp, yêu thương" },
+  { key: "pink", label: "Nơ hồng", note: "Tim, nơ, kẹo ngọt" },
 ];
 
 const boothFrames = [
@@ -748,6 +754,10 @@ const boothFrames = [
   { key: "garden", pack: "family", label: "Vườn xanh", className: "frame-garden", previewClass: "preview-garden" },
   { key: "notebook", pack: "family", label: "Vở ô ly", className: "frame-notebook", previewClass: "preview-notebook" },
   { key: "clean", pack: "family", label: "Khung trắng", className: "frame-clean", previewClass: "preview-clean" },
+  { key: "pinkBow", pack: "pink", label: "Nơ chấm bi", className: "frame-pink-bow", previewClass: "preview-pink-bow" },
+  { key: "pinkPlaid", pack: "pink", label: "Caro hồng", className: "frame-pink-plaid", previewClass: "preview-pink-plaid" },
+  { key: "pinkRibbon", pack: "pink", label: "Ruy băng ngọt", className: "frame-pink-ribbon", previewClass: "preview-pink-ribbon" },
+  { key: "pinkLove", pack: "pink", label: "Love cupcake", className: "frame-pink-love", previewClass: "preview-pink-love" },
 ];
 
 const state = {
@@ -762,6 +772,8 @@ const state = {
   memoryBusy: false,
   riddleIndex: 0,
   colorIndex: 0,
+  practiceMode: "daily",
+  practiceSubject: "math",
   boothThemeKey: "boys",
   boothFrameKey: "superhero",
 };
@@ -789,6 +801,16 @@ const dom = {
   videoLessonList: document.querySelector("#videoLessonList"),
   exerciseTitle: document.querySelector("#exerciseTitle"),
   exerciseList: document.querySelector("#exerciseList"),
+  practicePlanTabs: document.querySelector("#practicePlanTabs"),
+  practiceSubjectCards: document.querySelector("#practiceSubjectCards"),
+  weeklyPlanBoard: document.querySelector("#weeklyPlanBoard"),
+  practiceModeLabel: document.querySelector("#practiceModeLabel"),
+  practiceProgressText: document.querySelector("#practiceProgressText"),
+  practiceQuestion: document.querySelector("#practiceQuestion"),
+  practiceAnswerGrid: document.querySelector("#practiceAnswerGrid"),
+  practiceFeedback: document.querySelector("#practiceFeedback"),
+  certificateArea: document.querySelector("#certificateArea"),
+  printCertificateBtn: document.querySelector("#printCertificateBtn"),
   nextLessonBtn: document.querySelector("#nextLessonBtn"),
   starCount: document.querySelector("#starCount"),
   doneCount: document.querySelector("#doneCount"),
@@ -812,6 +834,7 @@ const dom = {
   boothFrameName: document.querySelector("#boothFrameName"),
   captureSuccess: document.querySelector("#captureSuccess"),
   boothVideo: document.querySelector("#boothVideo"),
+  boothStillPreview: document.querySelector("#boothStillPreview"),
   boothCanvas: document.querySelector("#boothCanvas"),
   cameraPlaceholder: document.querySelector("#cameraPlaceholder"),
   photoPreview: document.querySelector("#photoPreview"),
@@ -880,6 +903,7 @@ function renderSubjectPicker() {
     button.textContent = subject.label;
     button.addEventListener("click", () => {
       state.subject = key;
+      state.practiceSubject = key;
       state.lessonIndex = 0;
       state.quizIndex = 0;
       renderLearning();
@@ -1040,6 +1064,323 @@ function renderExerciseList() {
   });
 }
 
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function weekKey(date = new Date()) {
+  const monday = new Date(date);
+  const dayIndex = (monday.getDay() + 6) % 7;
+  monday.setDate(monday.getDate() - dayIndex);
+  return localDateKey(monday);
+}
+
+function practiceStorageKey(mode = state.practiceMode) {
+  const gradePart = `grade-${state.grade}`;
+  return mode === "weekly"
+    ? `vh-practice-week-${weekKey()}-${gradePart}`
+    : `vh-practice-day-${localDateKey()}-${gradePart}`;
+}
+
+function emptyPracticeRecord(mode = state.practiceMode) {
+  const subjects = {};
+  practiceSubjects.forEach((subjectKey) => {
+    subjects[subjectKey] = {
+      answered: 0,
+      correct: 0,
+      certificateAt: "",
+    };
+  });
+
+  return {
+    mode,
+    grade: state.grade,
+    key: mode === "weekly" ? weekKey() : localDateKey(),
+    subjects,
+  };
+}
+
+function getPracticeRecord(mode = state.practiceMode) {
+  const key = practiceStorageKey(mode);
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || "null");
+    if (parsed?.subjects) {
+      practiceSubjects.forEach((subjectKey) => {
+        if (!parsed.subjects[subjectKey]) {
+          parsed.subjects[subjectKey] = { answered: 0, correct: 0, certificateAt: "" };
+        }
+      });
+      return parsed;
+    }
+  } catch (error) {
+    // If storage is corrupted, start a fresh record.
+  }
+  return emptyPracticeRecord(mode);
+}
+
+function savePracticeRecord(record, mode = state.practiceMode) {
+  localStorage.setItem(practiceStorageKey(mode), JSON.stringify(record));
+}
+
+function practiceGoal(mode = state.practiceMode) {
+  return mode === "weekly" ? WEEKLY_PRACTICE_GOAL : DAILY_PRACTICE_GOAL;
+}
+
+function practiceTitle(mode = state.practiceMode) {
+  return mode === "weekly" ? "Bài tập tuần" : "Bài tập ngày";
+}
+
+function buildPracticeQuestions(subjectKey, grade, count) {
+  const source = [];
+  lessonBank[subjectKey][grade].forEach((lessonData) => {
+    lessonData.quiz.forEach((quiz) => {
+      source.push({
+        ...quiz,
+        lessonTitle: lessonData.title,
+      });
+    });
+  });
+
+  return Array.from({ length: count }, (_, index) => ({
+    ...source[index % source.length],
+    round: index + 1,
+  }));
+}
+
+function renderPracticePlanTabs() {
+  if (!dom.practicePlanTabs) return;
+
+  [...dom.practicePlanTabs.querySelectorAll("[data-practice-mode]")].forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.practiceMode === state.practiceMode);
+  });
+}
+
+function renderPracticeSubjectCards() {
+  if (!dom.practiceSubjectCards) return;
+
+  const record = getPracticeRecord(state.practiceMode);
+  const goal = practiceGoal();
+  dom.practiceSubjectCards.innerHTML = "";
+
+  practiceSubjects.forEach((subjectKey) => {
+    const subject = subjects[subjectKey];
+    const progress = record.subjects[subjectKey];
+    const answered = Math.min(progress.answered, goal);
+    const done = answered >= goal;
+    const percent = Math.round((answered / goal) * 100);
+    const button = document.createElement("button");
+    button.className = `practice-subject-card${subjectKey === state.practiceSubject ? " is-active" : ""}${done ? " is-done" : ""}`;
+    button.type = "button";
+    button.innerHTML = `
+      <span>${subject.label}</span>
+      <strong>${answered}/${goal} câu</strong>
+      <em>${progress.correct} câu đúng</em>
+      <i><b style="width: ${percent}%"></b></i>
+    `;
+    button.addEventListener("click", () => {
+      state.practiceSubject = subjectKey;
+      state.subject = subjectKey;
+      state.lessonIndex = 0;
+      state.quizIndex = 0;
+      renderLearning();
+    });
+    dom.practiceSubjectCards.append(button);
+  });
+}
+
+function renderWeeklyPlanBoard() {
+  if (!dom.weeklyPlanBoard) return;
+
+  const subject = subjects[state.practiceSubject];
+
+  if (state.practiceMode === "daily") {
+    const record = getPracticeRecord("daily");
+    const progress = record.subjects[state.practiceSubject];
+    dom.weeklyPlanBoard.innerHTML = `
+      <div class="weekly-plan-head">
+        <div>
+          <p class="eyebrow">${subject.label} lớp ${state.grade}</p>
+          <h3>Mục tiêu hôm nay</h3>
+        </div>
+        <span>${Math.min(progress.answered, DAILY_PRACTICE_GOAL)}/${DAILY_PRACTICE_GOAL} câu</span>
+      </div>
+      <div class="weekly-day-grid daily-goal-grid">
+        ${practiceSubjects.map((subjectKey) => {
+          const item = record.subjects[subjectKey];
+          const answered = Math.min(item.answered, DAILY_PRACTICE_GOAL);
+          const done = answered >= DAILY_PRACTICE_GOAL;
+          const current = subjectKey === state.practiceSubject;
+          return `<span class="${done ? "is-done" : current ? "is-current" : ""}">${subjects[subjectKey].label}<strong>${answered}/${DAILY_PRACTICE_GOAL} câu</strong></span>`;
+        }).join("")}
+      </div>
+    `;
+    return;
+  }
+
+  const record = getPracticeRecord("weekly");
+  const progress = record.subjects[state.practiceSubject];
+  const completedDays = Math.min(WEEKLY_PRACTICE_DAYS, Math.floor(progress.answered / DAILY_PRACTICE_GOAL));
+  dom.weeklyPlanBoard.innerHTML = `
+    <div class="weekly-plan-head">
+      <div>
+        <p class="eyebrow">${subject.label} lớp ${state.grade}</p>
+        <h3>Lộ trình tuần này</h3>
+      </div>
+      <span>${Math.min(progress.answered, WEEKLY_PRACTICE_GOAL)}/${WEEKLY_PRACTICE_GOAL} câu</span>
+    </div>
+    <div class="weekly-day-grid">
+      ${Array.from({ length: WEEKLY_PRACTICE_DAYS }, (_, index) => {
+        const dayDone = index < completedDays;
+        const current = index === completedDays && progress.answered < WEEKLY_PRACTICE_GOAL;
+        return `<span class="${dayDone ? "is-done" : current ? "is-current" : ""}">Buổi ${index + 1}<strong>${dayDone ? "Đã xong" : "20 câu"}</strong></span>`;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderPracticeQuestion() {
+  if (!dom.practiceQuestion || !dom.practiceAnswerGrid) return;
+
+  const mode = state.practiceMode;
+  const record = getPracticeRecord(mode);
+  const subjectProgress = record.subjects[state.practiceSubject];
+  const goal = practiceGoal(mode);
+  const answered = Math.min(subjectProgress.answered, goal);
+  const subject = subjects[state.practiceSubject];
+
+  if (dom.practiceModeLabel) dom.practiceModeLabel.textContent = `${practiceTitle(mode)} - ${subject.label}`;
+  if (dom.practiceProgressText) dom.practiceProgressText.textContent = `${answered}/${goal}`;
+  dom.practiceFeedback.textContent = "";
+  dom.practiceAnswerGrid.innerHTML = "";
+
+  if (answered >= goal) {
+    dom.practiceQuestion.textContent = `${subject.label} đã hoàn thành mục tiêu ${goal} câu. Nhận bằng khen nhé!`;
+    renderCertificate();
+    return;
+  }
+
+  const questions = buildPracticeQuestions(state.practiceSubject, state.grade, goal);
+  const current = questions[answered];
+  dom.practiceQuestion.textContent = `Câu ${answered + 1}: ${current.question}`;
+
+  current.answers.forEach((answer) => {
+    const button = document.createElement("button");
+    button.className = "answer-btn";
+    button.type = "button";
+    button.textContent = answer;
+    button.addEventListener("click", () => checkPracticeAnswer(button, answer, current.correct));
+    dom.practiceAnswerGrid.append(button);
+  });
+
+  renderCertificate();
+}
+
+function checkPracticeAnswer(button, answer, correct) {
+  const buttons = [...dom.practiceAnswerGrid.querySelectorAll("button")];
+  buttons.forEach((item) => {
+    item.disabled = true;
+    if (item.textContent === correct) item.classList.add("is-correct");
+  });
+
+  const mode = state.practiceMode;
+  const record = getPracticeRecord(mode);
+  const subjectProgress = record.subjects[state.practiceSubject];
+  const isCorrect = answer === correct;
+  subjectProgress.answered += 1;
+  if (isCorrect) {
+    subjectProgress.correct += 1;
+    button.classList.add("is-correct");
+    dom.practiceFeedback.textContent = "Đúng rồi, thêm một bước tiến!";
+  } else {
+    button.classList.add("is-wrong");
+    dom.practiceFeedback.textContent = `Chưa đúng. Đáp án là: ${correct}`;
+  }
+
+  if (subjectProgress.answered >= practiceGoal(mode) && !subjectProgress.certificateAt) {
+    subjectProgress.certificateAt = new Date().toLocaleString("vi-VN");
+    state.stars += mode === "weekly" ? 10 : 3;
+    state.done += 1;
+    saveProgress();
+    showToast("Bằng khen online đã mở!");
+  }
+  savePracticeRecord(record, mode);
+
+  if (mode === "daily") updateWeeklyFromDailyAnswer(isCorrect);
+
+  window.setTimeout(() => {
+    renderPracticeDashboard();
+  }, 850);
+}
+
+function updateWeeklyFromDailyAnswer(isCorrect) {
+  const weeklyRecord = getPracticeRecord("weekly");
+  const weeklySubject = weeklyRecord.subjects[state.practiceSubject];
+  if (weeklySubject.answered < WEEKLY_PRACTICE_GOAL) {
+    weeklySubject.answered += 1;
+    if (isCorrect) weeklySubject.correct += 1;
+    if (weeklySubject.answered >= WEEKLY_PRACTICE_GOAL && !weeklySubject.certificateAt) {
+      weeklySubject.certificateAt = new Date().toLocaleString("vi-VN");
+    }
+    savePracticeRecord(weeklyRecord, "weekly");
+  }
+}
+
+function renderCertificate() {
+  if (!dom.certificateArea) return;
+
+  const record = getPracticeRecord(state.practiceMode);
+  const progress = record.subjects[state.practiceSubject];
+  const goal = practiceGoal();
+  const subject = subjects[state.practiceSubject];
+  const completed = progress.answered >= goal;
+
+  if (!completed) {
+    dom.certificateArea.className = "certificate-card";
+    dom.certificateArea.innerHTML = `
+      <p class="eyebrow">Bằng khen online</p>
+      <h3>Còn ${goal - progress.answered} câu nữa.</h3>
+      <p>Hoàn thành ${goal} câu ${subject.label} để nhận bằng khen.</p>
+    `;
+    if (dom.printCertificateBtn) dom.printCertificateBtn.disabled = true;
+    return;
+  }
+
+  dom.certificateArea.className = "certificate-card is-earned";
+  dom.certificateArea.innerHTML = `
+    <p class="eyebrow">Bằng khen online</p>
+    <h3>Trao tặng bé chăm học</h3>
+    <p>Đã hoàn thành ${goal} câu ${subject.label} lớp ${state.grade}.</p>
+    <strong>${progress.correct}/${progress.answered} câu đúng</strong>
+    <span>${state.practiceMode === "weekly" ? "Tuần" : "Ngày"}: ${record.key}</span>
+  `;
+  if (dom.printCertificateBtn) dom.printCertificateBtn.disabled = false;
+}
+
+function renderPracticeDashboard() {
+  if (!dom.practiceSubjectCards) return;
+
+  renderPracticePlanTabs();
+  renderPracticeSubjectCards();
+  renderWeeklyPlanBoard();
+  renderPracticeQuestion();
+}
+
+function setupPracticeDashboard() {
+  if (!dom.practicePlanTabs) return;
+
+  [...dom.practicePlanTabs.querySelectorAll("[data-practice-mode]")].forEach((button) => {
+    button.addEventListener("click", () => {
+      state.practiceMode = button.dataset.practiceMode;
+      renderPracticeDashboard();
+    });
+  });
+
+  dom.printCertificateBtn?.addEventListener("click", () => window.print());
+}
+
 function renderQuiz() {
   const lessonData = currentLesson();
   const quiz = lessonData.quiz[state.quizIndex];
@@ -1099,6 +1440,7 @@ function renderLearning() {
   renderLesson();
   renderVideoLessonList();
   renderExerciseList();
+  renderPracticeDashboard();
 }
 
 function setupNextLesson() {
@@ -1370,6 +1712,7 @@ async function startBoothCamera() {
     });
     dom.boothVideo.srcObject = boothStream;
     await dom.boothVideo.play();
+    clearBoothStillPreview();
     dom.cameraPlaceholder?.classList.add("is-hidden");
     if (dom.capturePhotoBtn) dom.capturePhotoBtn.disabled = false;
     if (dom.startCameraBtn) dom.startCameraBtn.textContent = "Camera bật";
@@ -1459,6 +1802,7 @@ function finishBoothCanvas(context, width, height, message) {
 
   drawBoothFrame(context, width, height, currentBoothFrame());
   const imageUrl = dom.boothCanvas.toDataURL("image/png");
+  showBoothStillPreview(imageUrl);
   dom.photoPreview.src = imageUrl;
   dom.photoPreview.classList.add("has-photo");
   dom.emptyPhoto?.classList.add("is-hidden");
@@ -1468,6 +1812,21 @@ function finishBoothCanvas(context, width, height, message) {
   updateBoothStatus(message);
   playCaptureSuccessSound();
   showCaptureSuccessEffect();
+}
+
+function showBoothStillPreview(imageUrl) {
+  if (!dom.boothStillPreview) return;
+
+  dom.boothStillPreview.src = imageUrl;
+  dom.boothStillPreview.classList.add("is-visible");
+  dom.cameraPlaceholder?.classList.add("is-hidden");
+}
+
+function clearBoothStillPreview() {
+  if (!dom.boothStillPreview) return;
+
+  dom.boothStillPreview.removeAttribute("src");
+  dom.boothStillPreview.classList.remove("is-visible");
 }
 
 function playCaptureSuccessSound() {
@@ -1529,7 +1888,9 @@ function clearBoothPhoto() {
     dom.photoPreview.removeAttribute("src");
     dom.photoPreview.classList.remove("has-photo");
   }
+  clearBoothStillPreview();
   dom.emptyPhoto?.classList.remove("is-hidden");
+  if (!boothStream) dom.cameraPlaceholder?.classList.remove("is-hidden");
   if (dom.downloadPhotoLink) {
     dom.downloadPhotoLink.removeAttribute("href");
     dom.downloadPhotoLink.classList.add("disabled-link");
@@ -1584,6 +1945,18 @@ function drawBoothFrame(context, width, height, frame) {
       break;
     case "picnic":
       drawPicnicFrame(context, width, height);
+      break;
+    case "pinkBow":
+      drawPinkBowFrame(context, width, height);
+      break;
+    case "pinkPlaid":
+      drawPinkPlaidFrame(context, width, height);
+      break;
+    case "pinkRibbon":
+      drawPinkRibbonFrame(context, width, height);
+      break;
+    case "pinkLove":
+      drawPinkLoveFrame(context, width, height);
       break;
     case "rainbow":
       drawRainbowFrame(context, width, height);
@@ -1784,6 +2157,43 @@ function drawPicnicFrame(context, width, height) {
   drawFrameLabel(context, width / 2, height - 72, "Dã ngoại vui", 300, "#ffffff");
 }
 
+function drawPinkBowFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 78, "#ffd7ef");
+  fillFrameBorder(context, width, height, 54, "#ffb3d1");
+  drawWavyInnerFrame(context, width, height, 94, "#ff5d9b");
+  drawBow(context, 120, 92, 110, "#ff8fbd");
+  drawSpeechBubble(context, width - 150, 90, "Cute!", "#ffffff");
+  drawHeart(context, 96, height - 96, 34, "#ff5d9b");
+  drawHeart(context, width - 98, height - 90, 42, "#ff8fbd");
+}
+
+function drawPinkPlaidFrame(context, width, height) {
+  drawPlaidBorder(context, width, height, 86);
+  drawBow(context, width - 126, 94, 104, "#ff8fbd");
+  drawSpeechBubble(context, 144, 88, "So cute!", "#ffffff");
+  drawTinyCamera(context, width - 104, height - 108);
+  drawHeart(context, 96, height - 90, 28, "#ff5d9b");
+}
+
+function drawPinkRibbonFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 82, "#ffd7ef");
+  drawWavyInnerFrame(context, width, height, 98, "#ff5d9b");
+  drawRibbonBanner(context, width / 2, 98, Math.min(width - 220, 430), "Nơ hồng");
+  drawBow(context, width / 2, 44, 96, "#ff8fbd");
+  drawCupcake(context, width - 100, height - 104, 68);
+  drawHeart(context, 98, height - 90, 30, "#ff5d9b");
+}
+
+function drawPinkLoveFrame(context, width, height) {
+  fillFrameBorder(context, width, height, 78, "#ffb3d1");
+  fillFrameBorder(context, width, height, 52, "#ffd7ef");
+  drawDashedInnerFrame(context, width, height, 96, "#ff5d9b");
+  drawBow(context, width / 2, 62, 106, "#ff8fbd");
+  drawSpeechBubble(context, width - 130, 138, "LOVE", "#ffffff");
+  drawCupcake(context, width - 104, height - 104, 66);
+  drawHeart(context, 94, height - 96, 34, "#ff5d9b");
+}
+
 function drawCrown(context, x, y, width, height) {
   const left = x - width / 2;
   const top = y - height / 2;
@@ -1939,6 +2349,140 @@ function drawRoundedRect(context, x, y, width, height, radius, fill, stroke, lin
   context.fill();
   context.lineWidth = lineWidth;
   context.strokeStyle = stroke;
+  context.stroke();
+  context.restore();
+}
+
+function drawWavyInnerFrame(context, width, height, inset, color) {
+  context.save();
+  context.strokeStyle = color;
+  context.lineWidth = 6;
+  context.beginPath();
+  const wave = 12;
+  const left = inset;
+  const right = width - inset;
+  const top = inset;
+  const bottom = height - inset;
+  for (let x = left; x <= right; x += wave) {
+    const y = top + Math.sin((x - left) / wave) * 5;
+    if (x === left) context.moveTo(x, y);
+    else context.lineTo(x, y);
+  }
+  for (let y = top; y <= bottom; y += wave) {
+    context.lineTo(right + Math.sin((y - top) / wave) * 5, y);
+  }
+  for (let x = right; x >= left; x -= wave) {
+    context.lineTo(x, bottom + Math.sin((right - x) / wave) * 5);
+  }
+  for (let y = bottom; y >= top; y -= wave) {
+    context.lineTo(left + Math.sin((bottom - y) / wave) * 5, y);
+  }
+  context.closePath();
+  context.stroke();
+  context.restore();
+}
+
+function drawDashedInnerFrame(context, width, height, inset, color) {
+  context.save();
+  context.strokeStyle = color;
+  context.lineWidth = 5;
+  context.setLineDash([18, 13]);
+  drawRoundedRect(context, inset, inset, width - inset * 2, height - inset * 2, 42, "rgba(255,255,255,0)", color, 5);
+  context.restore();
+}
+
+function drawPlaidBorder(context, width, height, size) {
+  fillFrameBorder(context, width, height, size, "#ffd7ef");
+  context.save();
+  context.globalAlpha = 0.52;
+  context.fillStyle = "#ffffff";
+  for (let x = 0; x < width; x += 42) context.fillRect(x, 0, 20, height);
+  for (let y = 0; y < height; y += 42) context.fillRect(0, y, width, 20);
+  context.restore();
+  drawRoundedRect(context, size, size, width - size * 2, height - size * 2, 40, "rgba(255,255,255,0)", "#ff5d9b", 6);
+}
+
+function drawSpeechBubble(context, x, y, text, fill) {
+  context.save();
+  const width = Math.max(130, text.length * 24);
+  const height = 64;
+  drawRoundedRect(context, x - width / 2, y - height / 2, width, height, 24, fill, "#263238", 5);
+  context.beginPath();
+  context.moveTo(x + width * 0.18, y + height / 2 - 4);
+  context.lineTo(x + width * 0.32, y + height / 2 + 22);
+  context.lineTo(x + width * 0.02, y + height / 2 - 2);
+  context.closePath();
+  context.fillStyle = fill;
+  context.fill();
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.stroke();
+  context.fillStyle = "#ff5d9b";
+  context.font = "900 32px Segoe UI, Arial, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(text, x, y + 1, width - 24);
+  context.restore();
+}
+
+function drawRibbonBanner(context, x, y, width, text) {
+  context.save();
+  const height = 66;
+  context.fillStyle = "#ffb3d1";
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.beginPath();
+  context.moveTo(x - width / 2, y - height / 2);
+  context.lineTo(x + width / 2, y - height / 2);
+  context.lineTo(x + width / 2 + 34, y);
+  context.lineTo(x + width / 2, y + height / 2);
+  context.lineTo(x - width / 2, y + height / 2);
+  context.lineTo(x - width / 2 - 34, y);
+  context.closePath();
+  context.fill();
+  context.stroke();
+  context.fillStyle = "#ff5d9b";
+  context.font = "900 34px Segoe UI, Arial, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(text, x, y + 1, width - 20);
+  context.restore();
+}
+
+function drawCupcake(context, x, y, size) {
+  context.save();
+  context.translate(x, y);
+  context.beginPath();
+  context.arc(0, -size * 0.24, size * 0.38, Math.PI, 0);
+  context.lineTo(size * 0.38, size * 0.02);
+  context.lineTo(-size * 0.38, size * 0.02);
+  context.closePath();
+  context.fillStyle = "#ffffff";
+  context.fill();
+  context.lineWidth = 5;
+  context.strokeStyle = "#263238";
+  context.stroke();
+  drawRoundedRect(context, -size * 0.34, size * 0.02, size * 0.68, size * 0.42, 8, "#ffd166", "#263238", 5);
+  context.beginPath();
+  context.arc(0, -size * 0.56, size * 0.11, 0, Math.PI * 2);
+  context.fillStyle = "#ff5d9b";
+  context.fill();
+  context.stroke();
+  context.restore();
+}
+
+function drawTinyCamera(context, x, y) {
+  context.save();
+  drawRoundedRect(context, x - 42, y - 30, 84, 60, 8, "#ffb3d1", "#263238", 5);
+  context.fillStyle = "#ffd7ef";
+  context.fillRect(x - 22, y - 42, 44, 16);
+  context.strokeStyle = "#263238";
+  context.lineWidth = 5;
+  context.strokeRect(x - 22, y - 42, 44, 16);
+  context.beginPath();
+  context.arc(x, y, 16, 0, Math.PI * 2);
+  context.fillStyle = "#ffffff";
+  context.fill();
   context.stroke();
   context.restore();
 }
@@ -2323,6 +2867,7 @@ function init() {
   if (dom.gradePicker && dom.subjectPicker && dom.lessonList) {
     renderLearning();
     setupNextLesson();
+    setupPracticeDashboard();
   }
 
   setupPlayTabs();
