@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Học - Vui Học Tiểu Học</title>
+    <title>Học - Học vui - Vui học</title>
     <link rel="preconnect" href="https://www.youtube-nocookie.com" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="Về trang học">
-        <span class="brand-mark" aria-hidden="true">VH</span>
-        <span>Vui Học</span>
+        <span class="brand-mark" aria-hidden="true">HV</span>
+        <span>Học vui - Vui học</span>
       </a>
       <nav class="topnav" aria-label="Trang chính">
         <a class="is-active" href="index.html">Học</a>
@@ -25,7 +25,7 @@
       <section class="intro-band" aria-label="Trang học hôm nay">
         <div class="intro-copy">
           <p class="eyebrow">Lớp 1 đến lớp 5</p>
-          <h1>Chọn lớp, học vui.</h1>
+          <h1>Học vui, vui học.</h1>
           <p class="intro-text">Bé chọn lớp trước, rồi chọn môn Toán, Tiếng Việt hoặc Tiếng Anh.</p>
           <div class="stat-row" aria-label="Tiến bộ">
             <span><strong id="starCount">0</strong> sao</span>
@@ -53,18 +53,6 @@
           </div>
         </div>
         <div class="subject-picker" id="subjectPicker" role="tablist" aria-label="Chọn môn học"></div>
-      </section>
-
-      <section class="roadmap-band" aria-label="Lộ trình học theo SGK">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Lộ trình SGK</p>
-            <h2>Tổng đường học</h2>
-          </div>
-          <p class="section-note">Theo mạch CT GDPT 2018, phù hợp nhiều bộ SGK.</p>
-        </div>
-        <div class="roadmap-grid" id="sgkRoadmap"></div>
-        <div class="grade-route" id="gradeRoute"></div>
       </section>
 
       <section class="learn-grid">
@@ -184,8 +172,8 @@
           <article class="certificate-panel" aria-label="Bằng khen online">
             <div class="certificate-card" id="certificateArea">
               <p class="eyebrow">Bằng khen online</p>
-              <h3>Hoàn thành nhiệm vụ sẽ nhận bằng khen.</h3>
-              <p>Con làm đủ mục tiêu, bằng khen sẽ sáng lên ở đây.</p>
+              <h3>Chứng nhận học giỏi</h3>
+              <p>Con đã làm bài xuất sắc. Hoàn thành mục tiêu để mở bằng khen nhé.</p>
             </div>
             <button class="small-btn" id="printCertificateBtn" type="button" disabled>In / Lưu PDF</button>
           </article>
@@ -194,6 +182,7 @@
     </main>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="celebration-layer" id="celebrationLayer" aria-hidden="true"></div>
     <script src="script.js"></script>
   </body>
 </html>

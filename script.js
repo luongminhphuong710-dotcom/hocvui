@@ -587,6 +587,94 @@ const DAILY_PRACTICE_GOAL = 20;
 const WEEKLY_PRACTICE_DAYS = 5;
 const WEEKLY_PRACTICE_GOAL = DAILY_PRACTICE_GOAL * WEEKLY_PRACTICE_DAYS;
 const practiceSubjects = ["math", "vietnamese", "english"];
+const correctEncouragements = [
+  "Con làm rất tốt!",
+  "Giỏi lắm, tiếp tục nhé!",
+  "Một câu thật chắc tay!",
+  "Con đang tiến bộ từng chút một!",
+  "Tuyệt vời, giữ nhịp này nhé!",
+];
+const tryAgainEncouragements = [
+  "Không sao, con đã thử rất tốt.",
+  "Sai một chút cũng là đang học.",
+  "Mình xem đáp án rồi thử câu sau nhé.",
+  "Con bình tĩnh, câu sau sẽ tốt hơn.",
+  "Cố lên, mỗi câu đều giúp con giỏi hơn.",
+];
+const completionMessages = [
+  "Hoàn thành rồi, con xứng đáng được khen!",
+  "Một khóa học nhỏ đã xong thật đẹp!",
+  "Con đã cán đích hôm nay!",
+];
+const vietnamesePracticeWords = {
+  1: [
+    ["bé", "người"], ["bà", "người"], ["mẹ", "người"], ["cá", "con vật"], ["chim", "con vật"],
+    ["mèo", "con vật"], ["bút", "đồ vật"], ["vở", "đồ vật"], ["sách", "đồ vật"], ["bàn", "đồ vật"],
+    ["hoa", "cây cối"], ["lá", "cây cối"], ["cây", "cây cối"], ["nắng", "thiên nhiên"], ["mưa", "thiên nhiên"],
+    ["gió", "thiên nhiên"], ["đọc", "hoạt động"], ["viết", "hoạt động"], ["chạy", "hoạt động"], ["hát", "hoạt động"],
+  ],
+  2: [
+    ["học sinh", "người"], ["thầy giáo", "người"], ["bạn bè", "người"], ["con ong", "con vật"], ["con sóc", "con vật"],
+    ["bảng đen", "đồ vật"], ["thước kẻ", "đồ vật"], ["cặp sách", "đồ vật"], ["hoa hồng", "cây cối"], ["cây cam", "cây cối"],
+    ["dòng sông", "thiên nhiên"], ["đám mây", "thiên nhiên"], ["mặt trời", "thiên nhiên"], ["đọc bài", "hoạt động"], ["vẽ tranh", "hoạt động"],
+    ["nhảy dây", "hoạt động"], ["vui vẻ", "đặc điểm"], ["chăm chỉ", "đặc điểm"], ["gọn gàng", "đặc điểm"], ["sạch sẽ", "đặc điểm"],
+  ],
+  3: [
+    ["nhân hậu", "đặc điểm"], ["dũng cảm", "đặc điểm"], ["siêng năng", "đặc điểm"], ["đoàn kết", "đặc điểm"], ["lễ phép", "đặc điểm"],
+    ["so sánh", "kiến thức"], ["dấu phẩy", "kiến thức"], ["câu kể", "kiến thức"], ["từ chỉ sự vật", "kiến thức"], ["từ chỉ hoạt động", "kiến thức"],
+    ["quê hương", "địa điểm"], ["sân trường", "địa điểm"], ["thư viện", "địa điểm"], ["cánh đồng", "địa điểm"], ["dòng suối", "thiên nhiên"],
+    ["kể chuyện", "hoạt động"], ["luyện đọc", "hoạt động"], ["trả lời", "hoạt động"], ["quan sát", "hoạt động"], ["ghi nhớ", "hoạt động"],
+  ],
+  4: [
+    ["miêu tả", "kiến thức"], ["mở bài", "kiến thức"], ["thân bài", "kiến thức"], ["kết bài", "kiến thức"], ["chủ ngữ", "kiến thức"],
+    ["vị ngữ", "kiến thức"], ["trạng ngữ", "kiến thức"], ["tính từ", "kiến thức"], ["động từ", "kiến thức"], ["danh từ", "kiến thức"],
+    ["trung thực", "đặc điểm"], ["kiên trì", "đặc điểm"], ["tự tin", "đặc điểm"], ["sáng tạo", "đặc điểm"], ["thân thiện", "đặc điểm"],
+    ["lập dàn ý", "hoạt động"], ["đọc hiểu", "hoạt động"], ["viết đoạn", "hoạt động"], ["trao đổi", "hoạt động"], ["thuyết trình", "hoạt động"],
+  ],
+  5: [
+    ["đồng nghĩa", "kiến thức"], ["trái nghĩa", "kiến thức"], ["quan hệ từ", "kiến thức"], ["đại từ", "kiến thức"], ["liên kết câu", "kiến thức"],
+    ["bố cục", "kiến thức"], ["luận điểm", "kiến thức"], ["dẫn chứng", "kiến thức"], ["biểu cảm", "kiến thức"], ["tả cảnh", "kiến thức"],
+    ["trách nhiệm", "đặc điểm"], ["tôn trọng", "đặc điểm"], ["hợp tác", "đặc điểm"], ["bền bỉ", "đặc điểm"], ["tích cực", "đặc điểm"],
+    ["lập luận", "hoạt động"], ["phân tích", "hoạt động"], ["tóm tắt", "hoạt động"], ["nhận xét", "hoạt động"], ["sáng tác", "hoạt động"],
+  ],
+};
+const englishPracticeWords = {
+  1: [
+    ["hello", "xin chào", "greeting"], ["bye", "tạm biệt", "greeting"], ["red", "màu đỏ", "color"], ["blue", "màu xanh dương", "color"],
+    ["green", "màu xanh lá", "color"], ["one", "số một", "number"], ["two", "số hai", "number"], ["three", "số ba", "number"],
+    ["book", "quyển sách", "school"], ["pen", "cây bút", "school"], ["bag", "cái cặp", "school"], ["ball", "quả bóng", "toy"],
+    ["car", "xe đồ chơi", "toy"], ["doll", "búp bê", "toy"], ["cat", "con mèo", "animal"], ["dog", "con chó", "animal"],
+    ["mom", "mẹ", "family"], ["dad", "ba", "family"], ["happy", "vui vẻ", "feeling"], ["sad", "buồn", "feeling"],
+  ],
+  2: [
+    ["family", "gia đình", "family"], ["sister", "chị em gái", "family"], ["brother", "anh em trai", "family"], ["teacher", "giáo viên", "people"],
+    ["friend", "bạn", "people"], ["pencil", "bút chì", "school"], ["ruler", "thước kẻ", "school"], ["eraser", "cục tẩy", "school"],
+    ["head", "đầu", "body"], ["hand", "bàn tay", "body"], ["foot", "bàn chân", "body"], ["sunny", "nắng", "weather"],
+    ["rainy", "mưa", "weather"], ["cloudy", "có mây", "weather"], ["eat", "ăn", "action"], ["drink", "uống", "action"],
+    ["run", "chạy", "action"], ["apple", "quả táo", "food"], ["milk", "sữa", "food"], ["rice", "cơm", "food"],
+  ],
+  3: [
+    ["name", "tên", "people"], ["age", "tuổi", "people"], ["school", "trường học", "place"], ["classroom", "lớp học", "place"],
+    ["library", "thư viện", "place"], ["morning", "buổi sáng", "time"], ["afternoon", "buổi chiều", "time"], ["evening", "buổi tối", "time"],
+    ["math", "môn toán", "subject"], ["music", "âm nhạc", "subject"], ["art", "mĩ thuật", "subject"], ["read", "đọc", "action"],
+    ["write", "viết", "action"], ["draw", "vẽ", "action"], ["small", "nhỏ", "size"], ["big", "to", "size"],
+    ["long", "dài", "size"], ["short", "ngắn", "size"], ["orange", "quả cam", "food"], ["bread", "bánh mì", "food"],
+  ],
+  4: [
+    ["bedroom", "phòng ngủ", "room"], ["kitchen", "nhà bếp", "room"], ["bathroom", "phòng tắm", "room"], ["living room", "phòng khách", "room"],
+    ["table", "cái bàn", "furniture"], ["chair", "cái ghế", "furniture"], ["lamp", "đèn", "furniture"], ["doctor", "bác sĩ", "job"],
+    ["farmer", "nông dân", "job"], ["driver", "tài xế", "job"], ["market", "chợ", "place"], ["park", "công viên", "place"],
+    ["hospital", "bệnh viện", "place"], ["near", "gần", "position"], ["behind", "phía sau", "position"], ["between", "ở giữa", "position"],
+    ["always", "luôn luôn", "frequency"], ["usually", "thường xuyên", "frequency"], ["sometimes", "thỉnh thoảng", "frequency"], ["never", "không bao giờ", "frequency"],
+  ],
+  5: [
+    ["conversation", "cuộc trò chuyện", "communication"], ["question", "câu hỏi", "communication"], ["answer", "câu trả lời", "communication"], ["because", "bởi vì", "connector"],
+    ["but", "nhưng", "connector"], ["and", "và", "connector"], ["hobby", "sở thích", "life"], ["favorite", "yêu thích", "life"],
+    ["weekend", "cuối tuần", "time"], ["holiday", "kì nghỉ", "time"], ["yesterday", "hôm qua", "time"], ["tomorrow", "ngày mai", "time"],
+    ["science", "khoa học", "subject"], ["history", "lịch sử", "subject"], ["geography", "địa lí", "subject"], ["careful", "cẩn thận", "quality"],
+    ["friendly", "thân thiện", "quality"], ["creative", "sáng tạo", "quality"], ["practice", "luyện tập", "action"], ["improve", "cải thiện", "action"],
+  ],
+};
 
 const stories = [
   {
@@ -788,8 +876,6 @@ const dom = {
   lessonTitle: document.querySelector("#lessonTitle"),
   lessonSummary: document.querySelector("#lessonSummary"),
   visualStrip: document.querySelector("#visualStrip"),
-  sgkRoadmap: document.querySelector("#sgkRoadmap"),
-  gradeRoute: document.querySelector("#gradeRoute"),
   quizBadge: document.querySelector("#quizBadge"),
   quizProgress: document.querySelector("#quizProgress"),
   quizQuestion: document.querySelector("#quizQuestion"),
@@ -849,6 +935,7 @@ const dom = {
   newsGrid: document.querySelector("#newsGrid"),
   tipsGrid: document.querySelector("#tipsGrid"),
   toast: document.querySelector("#toast"),
+  celebrationLayer: document.querySelector("#celebrationLayer"),
 };
 
 let boothStream = null;
@@ -962,47 +1049,6 @@ function renderLesson() {
   dom.videoTitle.textContent = `${lessonData.title} - ${video.title}`;
   dom.videoLink.href = youtubeWatch(video.id);
   renderQuiz();
-}
-
-function renderSgkRoadmap() {
-  if (!dom.sgkRoadmap || !dom.gradeRoute) return;
-
-  const subject = subjects[state.subject];
-  dom.sgkRoadmap.innerHTML = "";
-  Object.entries(sgkRoadmapBank[state.subject]).forEach(([grade, item]) => {
-    const gradeNumber = Number(grade);
-    const button = document.createElement("button");
-    button.className = `roadmap-card${gradeNumber === state.grade ? " is-active" : ""}`;
-    button.type = "button";
-    button.innerHTML = `
-      <span>Lớp ${gradeNumber}</span>
-      <strong>${item.focus}</strong>
-      <em>${item.outcome}</em>
-    `;
-    button.addEventListener("click", () => {
-      state.grade = gradeNumber;
-      state.lessonIndex = 0;
-      state.quizIndex = 0;
-      renderLearning();
-    });
-    dom.sgkRoadmap.append(button);
-  });
-
-  const current = sgkRoadmapBank[state.subject][state.grade];
-  dom.gradeRoute.innerHTML = `
-    <div class="route-head">
-      <div>
-        <p class="eyebrow">${subject.label} lớp ${state.grade}</p>
-        <h3>Lộ trình trong năm</h3>
-      </div>
-      <span>${current.route.length} chặng</span>
-    </div>
-    <div class="route-steps">
-      ${current.route
-        .map((step, index) => `<span class="${index === state.lessonIndex ? "is-current" : ""}">${index + 1}. ${step}</span>`)
-        .join("")}
-    </div>
-  `;
 }
 
 function renderVideoLessonList() {
@@ -1133,8 +1179,148 @@ function practiceTitle(mode = state.practiceMode) {
   return mode === "weekly" ? "Bài tập tuần" : "Bài tập ngày";
 }
 
+function rotateChoices(choices, seed = 0) {
+  if (!choices.length) return [];
+  const offset = Math.abs(seed) % choices.length;
+  return choices.slice(offset).concat(choices.slice(0, offset));
+}
+
+function makeChoices(correct, options, seed = 0) {
+  const unique = [];
+  [correct, ...options].forEach((value) => {
+    const text = String(value);
+    if (text && !unique.includes(text)) unique.push(text);
+  });
+  return rotateChoices(unique.slice(0, 4), seed);
+}
+
+function numberChoices(correct, seed = 0, step = 1) {
+  const value = Number(correct);
+  const options = [value - step, value + step, value + step * 2, value - step * 2, value + step * 3]
+    .filter((item) => Number.isFinite(item) && item >= 0)
+    .map((item) => String(Number.isInteger(item) ? item : Number(item.toFixed(2))));
+  return makeChoices(String(correct), options, seed);
+}
+
+function textLength(value) {
+  return Array.from(value.replace(/\s/g, "")).length;
+}
+
+function pickPracticeMessage(isCorrect, seed = 0) {
+  const list = isCorrect ? correctEncouragements : tryAgainEncouragements;
+  return list[Math.abs(seed) % list.length];
+}
+
+function makeMathPracticeQuestion(grade, index) {
+  const template = index % 5;
+
+  if (grade === 1) {
+    const a = (index * 3) % 9 + 1;
+    const b = (index * 2) % 8 + 1;
+    const bigger = Math.max(a + 4, b + 6);
+    const smaller = Math.min(a + 4, b + 6);
+    if (template === 0) return q(`${a} + ${b} = ?`, numberChoices(a + b, index), String(a + b));
+    if (template === 1) return q(`${a + b} - ${b} = ?`, numberChoices(a, index), String(a));
+    if (template === 2) return q(`Số nào đứng sau ${a + 9}?`, numberChoices(a + 10, index), String(a + 10));
+    if (template === 3) return q(`Số nào lớn hơn: ${bigger} hay ${smaller}?`, makeChoices(String(bigger), [smaller, bigger - 1, smaller - 1], index), String(bigger));
+    return q(`Có ${a} ngôi sao và thêm ${b} ngôi sao. Có tất cả mấy ngôi sao?`, numberChoices(a + b, index), String(a + b));
+  }
+
+  if (grade === 2) {
+    const a = 18 + index * 3;
+    const b = index % 8 + 5;
+    const factor = index % 5 + 2;
+    if (template === 0) return q(`${a} + ${b} = ?`, numberChoices(a + b, index), String(a + b));
+    if (template === 1) return q(`${a + b} - ${b} = ?`, numberChoices(a, index), String(a));
+    if (template === 2) return q(`${factor} x 2 = ?`, numberChoices(factor * 2, index), String(factor * 2));
+    if (template === 3) return q(`Số ${a} gồm mấy chục và mấy đơn vị?`, makeChoices(`${Math.floor(a / 10)} chục ${a % 10} đơn vị`, [`${a % 10} chục ${Math.floor(a / 10)} đơn vị`, `${a} chục`, `${Math.floor(a / 10)} đơn vị`], index), `${Math.floor(a / 10)} chục ${a % 10} đơn vị`);
+    return q(`${factor} nhóm, mỗi nhóm 5 cái. Có tất cả mấy cái?`, numberChoices(factor * 5, index), String(factor * 5));
+  }
+
+  if (grade === 3) {
+    const a = index % 8 + 3;
+    const b = index % 7 + 4;
+    const c = 120 + index * 7;
+    if (template === 0) return q(`${a} x ${b} = ?`, numberChoices(a * b, index), String(a * b));
+    if (template === 1) return q(`${a * b} : ${a} = ?`, numberChoices(b, index), String(b));
+    if (template === 2) return q(`${c} + ${b * 11} = ?`, numberChoices(c + b * 11, index, 3), String(c + b * 11));
+    if (template === 3) return q(`Hình vuông cạnh ${a} cm có chu vi bao nhiêu cm?`, numberChoices(a * 4, index), String(a * 4));
+    return q(`Một ngày có mấy giờ?`, makeChoices("24", ["12", "30", "60"], index), "24");
+  }
+
+  if (grade === 4) {
+    const a = index % 9 + 6;
+    const b = index % 6 + 4;
+    const den = index % 5 + 5;
+    const n1 = index % 3 + 1;
+    const n2 = index % 2 + 1;
+    if (template === 0) return q(`${a} x ${b} = ?`, numberChoices(a * b, index), String(a * b));
+    if (template === 1) return q(`${a * b} : ${b} = ?`, numberChoices(a, index), String(a));
+    if (template === 2) return q(`${n1}/${den} + ${n2}/${den} = ?`, makeChoices(`${n1 + n2}/${den}`, [`${n1 + n2}/${den + 1}`, `${n1}/${den}`, `${n2}/${den}`], index), `${n1 + n2}/${den}`);
+    if (template === 3) return q(`Hình chữ nhật dài ${a} cm, rộng ${b} cm. Diện tích là bao nhiêu cm²?`, numberChoices(a * b, index, 2), String(a * b));
+    return q(`Trung bình cộng của ${a} và ${b} là bao nhiêu?`, numberChoices((a + b) / 2, index, 0.5), String((a + b) / 2));
+  }
+
+  const a = index % 9 + 10;
+  const b = index % 8 + 2;
+  const percent = [10, 20, 25, 50][index % 4];
+  const base = (index % 7 + 4) * 10;
+  if (template === 0) return q(`${percent}% của ${base} là bao nhiêu?`, numberChoices((percent * base) / 100, index), String((percent * base) / 100));
+  if (template === 1) return q(`${a / 10} + ${b / 10} = ?`, numberChoices(Number(((a + b) / 10).toFixed(1)), index, 0.1), String(Number(((a + b) / 10).toFixed(1))));
+  if (template === 2) return q(`${a * b} : ${b} = ?`, numberChoices(a, index), String(a));
+  if (template === 3) return q(`Một hình chữ nhật dài ${a} m, rộng ${b} m. Diện tích là bao nhiêu m²?`, numberChoices(a * b, index, 2), String(a * b));
+  return q(`Tỉ số phần trăm của ${b} trên ${a * b} là bao nhiêu?`, makeChoices(`${Math.round((b / (a * b)) * 100)}%`, [`${b}%`, `${a}%`, `${Math.round((a / b) * 10)}%`], index), `${Math.round((b / (a * b)) * 100)}%`);
+}
+
+function practiceEntries(source) {
+  return source.map(([word, group]) => ({ word, group }));
+}
+
+function findPeer(entries, item) {
+  return entries.find((entry) => entry.group === item.group && entry.word !== item.word) || entries[0];
+}
+
+function generateVietnamesePractice(grade, count) {
+  const entries = practiceEntries(vietnamesePracticeWords[grade]);
+  const groups = [...new Set(entries.map((item) => item.group))];
+  return Array.from({ length: count }, (_, index) => {
+    const item = entries[index % entries.length];
+    const template = (index + Math.floor(index / entries.length)) % 5;
+    const firstLetter = Array.from(item.word)[0].toLowerCase();
+    const peer = findPeer(entries, item);
+    const otherWords = entries.filter((entry) => entry.group !== item.group).map((entry) => entry.word);
+    if (template === 0) return q(`Từ "${item.word}" bắt đầu bằng chữ nào?`, makeChoices(firstLetter, ["a", "b", "c", "d", "m", "n", "t", "v"], index), firstLetter);
+    if (template === 1) return q(`Từ "${item.word}" thuộc nhóm nào?`, makeChoices(item.group, groups.filter((group) => group !== item.group), index), item.group);
+    if (template === 2) return q(`Từ nào cùng nhóm với "${item.word}"?`, makeChoices(peer.word, otherWords, index), peer.word);
+    if (template === 3) return q(`Từ "${item.word}" có mấy chữ cái?`, numberChoices(textLength(item.word), index), String(textLength(item.word)));
+    return q(`Câu nào viết đúng?`, makeChoices(`Em học từ "${item.word}".`, [`em học từ "${item.word}".`, `Em học từ "${item.word}"`, `Em học từ ${item.word}`], index), `Em học từ "${item.word}".`);
+  });
+}
+
+function generateEnglishPractice(grade, count) {
+  const entries = englishPracticeWords[grade].map(([en, vi, group]) => ({ en, vi, group }));
+  const groups = [...new Set(entries.map((item) => item.group))];
+  return Array.from({ length: count }, (_, index) => {
+    const item = entries[index % entries.length];
+    const template = (index + Math.floor(index / entries.length)) % 5;
+    const peer = entries.find((entry) => entry.group === item.group && entry.en !== item.en) || entries[0];
+    const otherEntries = entries.filter((entry) => entry.en !== item.en);
+    if (template === 0) return q(`"${item.en}" nghĩa là gì?`, makeChoices(item.vi, otherEntries.map((entry) => entry.vi), index), item.vi);
+    if (template === 1) return q(`"${item.vi}" viết tiếng Anh là gì?`, makeChoices(item.en, otherEntries.map((entry) => entry.en), index), item.en);
+    if (template === 2) return q(`Từ "${item.en}" thuộc nhóm nào?`, makeChoices(item.group, groups.filter((group) => group !== item.group), index), item.group);
+    if (template === 3) return q(`Từ nào cùng nhóm với "${item.en}"?`, makeChoices(peer.en, otherEntries.filter((entry) => entry.group !== item.group).map((entry) => entry.en), index), peer.en);
+    return q(`Chọn cặp đúng.`, makeChoices(`${item.en} - ${item.vi}`, otherEntries.map((entry) => `${item.en} - ${entry.vi}`), index), `${item.en} - ${item.vi}`);
+  });
+}
+
+function generatedPracticeQuestions(subjectKey, grade, count) {
+  if (subjectKey === "math") return Array.from({ length: count }, (_, index) => makeMathPracticeQuestion(grade, index));
+  if (subjectKey === "vietnamese") return generateVietnamesePractice(grade, count);
+  return generateEnglishPractice(grade, count);
+}
+
 function buildPracticeQuestions(subjectKey, grade, count) {
-  const source = [];
+  const source = generatedPracticeQuestions(subjectKey, grade, Math.max(count, DAILY_PRACTICE_GOAL));
   lessonBank[subjectKey][grade].forEach((lessonData) => {
     lessonData.quiz.forEach((quiz) => {
       source.push({
@@ -1144,8 +1330,25 @@ function buildPracticeQuestions(subjectKey, grade, count) {
     });
   });
 
-  return Array.from({ length: count }, (_, index) => ({
-    ...source[index % source.length],
+  const seen = new Set();
+  const unique = [];
+  source.forEach((questionData) => {
+    if (!seen.has(questionData.question)) {
+      seen.add(questionData.question);
+      unique.push(questionData);
+    }
+  });
+
+  let fillIndex = 0;
+  while (unique.length < count && source.length) {
+    const base = source[fillIndex % source.length];
+    const question = `Ôn thêm ${unique.length + 1}: ${base.question}`;
+    unique.push({ ...base, question });
+    fillIndex += 1;
+  }
+
+  return unique.slice(0, count).map((item, index) => ({
+    ...item,
     round: index + 1,
   }));
 }
@@ -1227,7 +1430,7 @@ function renderWeeklyPlanBoard() {
     <div class="weekly-plan-head">
       <div>
         <p class="eyebrow">${subject.label} lớp ${state.grade}</p>
-        <h3>Lộ trình tuần này</h3>
+        <h3>Mục tiêu tuần này</h3>
       </div>
       <span>${Math.min(progress.answered, WEEKLY_PRACTICE_GOAL)}/${WEEKLY_PRACTICE_GOAL} câu</span>
     </div>
@@ -1290,13 +1493,14 @@ function checkPracticeAnswer(button, answer, correct) {
   const subjectProgress = record.subjects[state.practiceSubject];
   const isCorrect = answer === correct;
   subjectProgress.answered += 1;
+  const encouragement = pickPracticeMessage(isCorrect, subjectProgress.answered);
   if (isCorrect) {
     subjectProgress.correct += 1;
     button.classList.add("is-correct");
-    dom.practiceFeedback.textContent = "Đúng rồi, thêm một bước tiến!";
+    dom.practiceFeedback.textContent = `${encouragement} Đúng rồi, thêm một bước tiến!`;
   } else {
     button.classList.add("is-wrong");
-    dom.practiceFeedback.textContent = `Chưa đúng. Đáp án là: ${correct}`;
+    dom.practiceFeedback.textContent = `${encouragement} Đáp án là: ${correct}`;
   }
 
   if (subjectProgress.answered >= practiceGoal(mode) && !subjectProgress.certificateAt) {
@@ -1304,7 +1508,9 @@ function checkPracticeAnswer(button, answer, correct) {
     state.stars += mode === "weekly" ? 10 : 3;
     state.done += 1;
     saveProgress();
-    showToast("Bằng khen online đã mở!");
+    const message = completionMessages[subjectProgress.correct % completionMessages.length];
+    showToast("Chứng nhận học giỏi đã mở!");
+    celebrateCompletion(message);
   }
   savePracticeRecord(record, mode);
 
@@ -1323,6 +1529,8 @@ function updateWeeklyFromDailyAnswer(isCorrect) {
     if (isCorrect) weeklySubject.correct += 1;
     if (weeklySubject.answered >= WEEKLY_PRACTICE_GOAL && !weeklySubject.certificateAt) {
       weeklySubject.certificateAt = new Date().toLocaleString("vi-VN");
+      showToast("Mục tiêu tuần đã hoàn thành!");
+      celebrateCompletion("Con đã hoàn thành mục tiêu tuần. Quá tuyệt!");
     }
     savePracticeRecord(weeklyRecord, "weekly");
   }
@@ -1341,8 +1549,8 @@ function renderCertificate() {
     dom.certificateArea.className = "certificate-card";
     dom.certificateArea.innerHTML = `
       <p class="eyebrow">Bằng khen online</p>
-      <h3>Còn ${goal - progress.answered} câu nữa.</h3>
-      <p>Hoàn thành ${goal} câu ${subject.label} để nhận bằng khen.</p>
+      <h3>Chứng nhận học giỏi</h3>
+      <p>Còn ${goal - progress.answered} câu nữa. Hoàn thành ${goal} câu ${subject.label} để nhận bằng khen.</p>
     `;
     if (dom.printCertificateBtn) dom.printCertificateBtn.disabled = true;
     return;
@@ -1351,7 +1559,8 @@ function renderCertificate() {
   dom.certificateArea.className = "certificate-card is-earned";
   dom.certificateArea.innerHTML = `
     <p class="eyebrow">Bằng khen online</p>
-    <h3>Trao tặng bé chăm học</h3>
+    <h3>Chứng nhận học giỏi</h3>
+    <p>Con đã làm bài xuất sắc.</p>
     <p>Đã hoàn thành ${goal} câu ${subject.label} lớp ${state.grade}.</p>
     <strong>${progress.correct}/${progress.answered} câu đúng</strong>
     <span>${state.practiceMode === "weekly" ? "Tuần" : "Ngày"}: ${record.key}</span>
@@ -1406,19 +1615,27 @@ function checkAnswer(button, answer, correct) {
     if (item.textContent === correct) item.classList.add("is-correct");
   });
 
-  if (answer === correct) {
+  const isCorrect = answer === correct;
+  const quizLength = currentLesson().quiz.length;
+  const completingLesson = isCorrect && state.quizIndex === quizLength - 1;
+  const encouragement = pickPracticeMessage(isCorrect, state.quizIndex + state.done);
+
+  if (isCorrect) {
     button.classList.add("is-correct");
-    dom.feedback.textContent = "Đúng rồi, nhận 1 sao nhé!";
+    dom.feedback.textContent = `${encouragement} Đúng rồi, nhận 1 sao nhé!`;
     state.stars += 1;
     state.done += 1;
     saveProgress();
+    if (completingLesson) {
+      showToast("Hoàn thành bài học nhỏ!");
+      celebrateCompletion("Con đã hoàn thành một bài học. Giỏi lắm!");
+    }
   } else {
     button.classList.add("is-wrong");
-    dom.feedback.textContent = `Gần đúng rồi. Đáp án là: ${correct}`;
+    dom.feedback.textContent = `${encouragement} Đáp án là: ${correct}`;
   }
 
   setTimeout(() => {
-    const quizLength = currentLesson().quiz.length;
     state.quizIndex = (state.quizIndex + 1) % quizLength;
     renderQuiz();
     renderExerciseList();
@@ -1435,7 +1652,6 @@ function saveProgress() {
 function renderLearning() {
   renderGradePicker();
   renderSubjectPicker();
-  renderSgkRoadmap();
   renderLessonList();
   renderLesson();
   renderVideoLessonList();
@@ -2860,6 +3076,23 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => {
     dom.toast.classList.remove("is-showing");
   }, 1800);
+}
+
+function celebrateCompletion(message) {
+  if (!dom.celebrationLayer) return;
+
+  dom.celebrationLayer.innerHTML = `
+    <div class="celebration-message">
+      <span>Hoan hô!</span>
+      <strong>${message}</strong>
+    </div>
+    ${Array.from({ length: 18 }, (_, index) => `<i style="--i:${index}; --x:${(index % 9) * 12 - 48}px;"></i>`).join("")}
+  `;
+  dom.celebrationLayer.classList.add("is-showing");
+  window.clearTimeout(celebrateCompletion.timer);
+  celebrateCompletion.timer = window.setTimeout(() => {
+    dom.celebrationLayer.classList.remove("is-showing");
+  }, 2100);
 }
 
 function init() {

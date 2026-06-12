@@ -1,4 +1,4 @@
-# Vui Học Tiểu Học
+# Học vui - Vui học
 
 Web app học tương tác cho bé lớp 1 đến lớp 5.
 
@@ -8,7 +8,7 @@ Mở file `index.html` bằng trình duyệt.
 
 ## Cấu trúc trang
 
-- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng lộ trình SGK, danh sách bài học, video bài giảng, bài tập, nhiệm vụ ngày/tuần. Mỗi môn có mục tiêu ngày ít nhất 20 câu; hoàn thành sẽ nhận bằng khen online.
+- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng danh sách bài học, video bài giảng, bài tập, nhiệm vụ ngày/tuần. Mỗi môn có mục tiêu ngày ít nhất 20 câu; hoàn thành sẽ nhận bằng khen online với câu "Chứng nhận học giỏi".
 - `giai-tri.html`: Trang Giải trí, có Giải đố, Mini game, Game khác và video truyện cổ tích.
 - `chup-anh-vui.html`: Trang Chụp ảnh vui, có photobooth dùng camera trước, chọn bộ theme, ghép khung và tải ảnh PNG. Có bộ theme Con trai, Con gái, Gia đình, Nơ hồng; khi chụp thành công sẽ có âm báo và hiệu ứng trên màn hình.
 - `ban-tin.html`: Trang Bản tin, có bài tin ngắn và mẹo học tập hay.
