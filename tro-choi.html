@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="app.css" />
     <style>
       .arcade { width: min(1400px, calc(100% - 1.5rem)); padding-top: 1rem; display: grid; grid-template-columns: 280px 1fr; gap: 1rem; }
       .dock { position: sticky; top: 86px; align-self: start; display: flex; flex-direction: column; gap: .7rem; padding: 1rem; border: 2px solid var(--ink); border-radius: 14px; background: var(--white); box-shadow: 6px 6px 0 var(--sun); }
@@ -46,7 +47,8 @@
         <span>Học vui - Vui học</span>
       </a>
       <nav class="topnav" aria-label="Trang chính">
-        <a href="index.html">Học</a>
+        <a href="index.html">Hôm nay</a>
+        <a href="hoc-bai.html">Học bài</a>
         <a class="is-active" href="tro-choi.html">Trò chơi</a>
         <a href="giai-tri.html">Giải trí</a>
         <a href="chup-anh-vui.html">Chụp ảnh</a>
@@ -78,6 +80,7 @@
       </section>
     </main>
 
+    <script src="common.js"></script>
     <script>
       const games = [
         { id: "thoi-trang", file: "games/thoi-trang.html", icon: "👑", bg: "#ffe3ef", name: "Công chúa nhỏ", desc: "Vượt 10 chặng, kiếm kim cương, trang điểm công chúa" },
@@ -110,13 +113,22 @@
       $("reload").onclick = () => { if (current) frame.src = current.file; };
       $("full").onclick = () => { const s = $("stage"); (s.requestFullscreen || s.webkitRequestFullscreen || (() => {})).call(s); };
 
-      // Hẹn giờ nghỉ mắt: đếm phút chơi trong ngày
-      const today = new Date().toISOString().slice(0, 10);
-      if (store.get("hv-play-day") !== today) { store.set("hv-play-day", today); store.set("hv-play-min", "0"); store.set("hv-play-limit", "30"); }
-      let mins = +store.get("hv-play-min") || 0, limit = +store.get("hv-play-limit") || 30;
-      const render = () => { $("mins").textContent = mins; $("limitText").textContent = limit; $("rest").classList.toggle("show", mins >= limit); };
-      setInterval(() => { if (!document.hidden && mins < limit) { mins++; store.set("hv-play-min", mins); render(); } }, 60000);
-      $("more").onclick = () => { limit += 10; store.set("hv-play-limit", limit); render(); };
+      // Giờ chơi: lấy từ Góc bố mẹ (+ phút thưởng đổi quà). Khoá nếu chưa xong nhiệm vụ.
+      const today = HV.today();
+      const prof = HV.profile();
+      let limit = prof.playLimit + (HV.get("hv-bonus-" + today, 0) || 0) + (HV.get("hv-extra-" + today, 0) || 0);
+      let mins = HV.get("hv-play-" + today, 0) || 0;
+      const locked = !HV.gameUnlocked();
+      const render = () => {
+        $("mins").textContent = mins; $("limitText").textContent = limit;
+        const rest = $("rest");
+        if (locked) {
+          rest.classList.add("show");
+          rest.innerHTML = '<div>🔒</div><h2>Góc trò chơi đang khoá</h2><p>Con làm xong 3 nhiệm vụ hôm nay là được chơi ngay!</p><p><a class="game-btn" style="justify-content:center;width:auto;margin:auto;text-decoration:none" href="index.html">Đi làm nhiệm vụ</a></p>';
+        } else rest.classList.toggle("show", mins >= limit);
+      };
+      setInterval(() => { if (!locked && !document.hidden && mins < limit) { mins++; HV.set("hv-play-" + today, mins); render(); } }, 60000);
+      $("more").onclick = () => HV.parentGate(() => { HV.set("hv-extra-" + today, (HV.get("hv-extra-" + today, 0) || 0) + 10); limit += 10; render(); }, "Bố mẹ cho chơi thêm 10 phút");
       render();
 
       open(location.hash.slice(1) || store.get("hv-last-game") || games[0].id);

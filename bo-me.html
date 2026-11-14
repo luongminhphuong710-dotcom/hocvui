@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Góc bố mẹ - Học vui - Vui học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Về trang Hôm nay">
+        <span class="brand-mark" aria-hidden="true">HV</span>
+        <span>Học vui - Vui học</span>
+      </a>
+      <nav class="topnav" aria-label="Trang chính">
+        <a href="index.html">Hôm nay</a>
+        <a href="hoc-bai.html">Học bài</a>
+        <a href="tro-choi.html">Trò chơi</a>
+        <a href="giai-tri.html">Giải trí</a>
+        <a href="chup-anh-vui.html">Chụp ảnh</a>
+      </nav>
+    </header>
+
+    <main class="today" id="parentApp" hidden>
+      <section class="page-head">
+        <h1>🔒 Góc bố mẹ</h1>
+        <p class="muted">Theo dõi việc học của con, cài giờ chơi và đặt phần thưởng. Dữ liệu chỉ lưu trên thiết bị này.</p>
+      </section>
+
+      <section class="stat-grid" id="stats"></section>
+
+      <section class="panel-card">
+        <h2 class="block-title">7 ngày gần nhất</h2>
+        <div class="table-wrap"><table class="report" id="report"></table></div>
+        <p class="muted" id="advice"></p>
+      </section>
+
+      <div class="two-col">
+        <section class="panel-card">
+          <h2 class="block-title">Hồ sơ của con</h2>
+          <form id="profileForm" class="form">
+            <label>Tên gọi của con<input name="name" maxlength="20" required /></label>
+            <fieldset><legend>Ảnh đại diện</legend><div class="avatars" id="avatars"></div></fieldset>
+            <label>Lớp<select name="grade">
+              <option value="1">Lớp 1</option><option value="2">Lớp 2</option><option value="3">Lớp 3</option><option value="4">Lớp 4</option><option value="5">Lớp 5</option>
+            </select></label>
+            <label>Giờ chơi game mỗi ngày (phút)<input name="playLimit" type="number" min="5" max="180" step="5" required /></label>
+            <label class="check"><input name="requireMissions" type="checkbox" /> Chỉ mở game khi con làm xong 3 nhiệm vụ</label>
+            <button class="btn">Lưu hồ sơ</button>
+          </form>
+        </section>
+
+        <section class="panel-card">
+          <h2 class="block-title">Phần thưởng</h2>
+          <p class="muted">Đặt quà thật để con có động lực. Quà có chữ “phút” sẽ tự cộng thêm giờ chơi game hôm đó.</p>
+          <div id="rewardEdit" class="reward-edit"></div>
+          <form id="addReward" class="inline-form">
+            <input name="name" placeholder="Ví dụ: Đi ăn kem" required maxlength="40" />
+            <input name="cost" type="number" min="1" placeholder="Số sao" required />
+            <button class="btn">Thêm</button>
+          </form>
+          <h3 class="sub-title">Đã đổi gần đây</h3>
+          <ul class="history" id="history"></ul>
+        </section>
+      </div>
+
+      <section class="panel-card">
+        <h2 class="block-title">Thao tác nhanh</h2>
+        <div class="quick">
+          <button class="btn" id="unlockToday">🎮 Mở khoá game hôm nay</button>
+          <button class="btn ghost" id="plus5">⭐ Thưởng 5 sao</button>
+          <button class="btn ghost" id="minus5">Trừ 5 sao</button>
+          <button class="btn ghost" id="resetToday">Làm lại nhiệm vụ hôm nay</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="common.js"></script>
+    <script src="bo-me.js"></script>
+  </body>
+</html>

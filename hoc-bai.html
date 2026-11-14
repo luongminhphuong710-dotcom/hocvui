@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Học - Học vui - Vui học</title>
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Về trang học">
+        <span class="brand-mark" aria-hidden="true">HV</span>
+        <span>Học vui - Vui học</span>
+      </a>
+      <nav class="topnav" aria-label="Trang chính">
+        <a href="index.html">Hôm nay</a>
+        <a class="is-active" href="hoc-bai.html">Học bài</a>
+        <a href="tro-choi.html">Trò chơi</a>
+        <a href="giai-tri.html">Giải trí</a>
+        <a href="chup-anh-vui.html">Chụp ảnh</a>
+      </nav>
+    </header>
+
+    <main id="app" class="page-shell">
+      <section class="intro-band" aria-label="Trang học hôm nay">
+        <div class="intro-copy">
+          <p class="eyebrow">Lớp 1 đến lớp 5</p>
+          <h1>Học vui, vui học.</h1>
+          <p class="intro-text">Bé chọn lớp trước, rồi chọn môn Toán, Tiếng Việt hoặc Tiếng Anh.</p>
+          <div class="stat-row" aria-label="Tiến bộ">
+            <span><strong id="starCount">0</strong> sao</span>
+            <span><strong id="doneCount">0</strong> lượt đúng</span>
+            <span><strong>3</strong> môn</span>
+          </div>
+        </div>
+        <img class="hero-art" src="assets/hero-learning.png" alt="Các bạn nhỏ vui học trong lớp" />
+      </section>
+
+      <section class="control-band" id="learn" aria-label="Bộ lọc học tập">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Bộ lọc</p>
+            <h2>1. Chọn lớp</h2>
+          </div>
+          <p class="section-note">Mỗi lớp có bài học riêng, câu hỏi riêng và video gợi ý.</p>
+        </div>
+        <div class="grade-picker" id="gradePicker" role="list"></div>
+
+        <div class="section-heading compact-heading">
+          <div>
+            <p class="eyebrow">Vào lớp rồi chọn môn</p>
+            <h2>2. Chọn môn học</h2>
+          </div>
+        </div>
+        <div class="subject-picker" id="subjectPicker" role="tablist" aria-label="Chọn môn học"></div>
+      </section>
+
+      <section class="video-library" id="videoLibrary" aria-label="Thư viện video"></section>
+
+      <section class="learn-grid">
+        <aside class="lesson-panel" aria-label="Danh sách bài học">
+          <div class="panel-title">
+            <p class="eyebrow" id="levelLabel">Lớp 1</p>
+            <h2 id="subjectTitle">Toán</h2>
+          </div>
+          <div class="lesson-list" id="lessonList"></div>
+        </aside>
+
+        <section class="lesson-stage" aria-live="polite">
+          <div class="lesson-head">
+            <div>
+              <p class="eyebrow" id="lessonKind">Bài học</p>
+              <h2 id="lessonTitle">Đếm và cộng nhỏ</h2>
+            </div>
+            <button class="icon-action" id="nextLessonBtn" type="button" title="Bài tiếp">
+              <span aria-hidden="true">&rsaquo;</span>
+              <span class="sr-only">Bài tiếp</span>
+            </button>
+          </div>
+
+          <p class="lesson-summary" id="lessonSummary"></p>
+
+          <div class="visual-strip" id="visualStrip" aria-label="Giáo cụ trực quan"></div>
+        </section>
+      </section>
+
+      <section class="video-lessons-band" aria-label="Video bài giảng">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Video bài giảng</p>
+            <h2>Xem riêng</h2>
+          </div>
+        </div>
+        <div class="video-learning-grid">
+          <article class="video-card" aria-label="Video bài học đang chọn">
+            <div class="video-frame">
+              <iframe
+                id="lessonVideo"
+                title="Video bài học"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="video-meta">
+              <div>
+                <p class="eyebrow">Đang xem</p>
+                <h3 id="videoTitle"></h3>
+              </div>
+              <a class="text-link" id="videoLink" target="_blank" rel="noreferrer">Mở YouTube</a>
+            </div>
+          </article>
+          <div class="video-lesson-list" id="videoLessonList"></div>
+        </div>
+      </section>
+
+      <section class="exercise-band" aria-label="Bài tập riêng">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Bài tập</p>
+            <h2>Luyện riêng</h2>
+          </div>
+          <p class="section-note">Chọn đáp án, nhận sao và xem danh sách câu hỏi của bài.</p>
+        </div>
+        <div class="exercise-grid">
+          <article class="quiz-card" aria-label="Câu hỏi tương tác">
+            <div class="quiz-topline">
+              <span id="quizBadge">Thử sức</span>
+              <span id="quizProgress">1/3</span>
+            </div>
+            <h3 id="quizQuestion"></h3>
+            <div class="answer-grid" id="answerGrid"></div>
+            <p class="feedback" id="feedback" aria-live="assertive"></p>
+          </article>
+          <aside class="exercise-panel" aria-label="Danh sách bài tập">
+            <div class="panel-title">
+              <p class="eyebrow">Câu hỏi trong bài</p>
+              <h2 id="exerciseTitle">Bài tập</h2>
+            </div>
+            <div class="exercise-list" id="exerciseList"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="daily-practice-band" aria-label="Bài tập theo ngày và tuần">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Nhiệm vụ học tập</p>
+            <h2>Ngày và tuần</h2>
+          </div>
+          <p class="section-note">Mục tiêu mỗi ngày: 20 câu cho mỗi môn.</p>
+        </div>
+
+        <div class="practice-plan-tabs" id="practicePlanTabs" aria-label="Chọn bài tập ngày hoặc tuần">
+          <button class="is-active" type="button" data-practice-mode="daily">Theo ngày</button>
+          <button type="button" data-practice-mode="weekly">Theo tuần</button>
+        </div>
+
+        <div class="practice-subject-grid" id="practiceSubjectCards"></div>
+        <div class="weekly-plan-board" id="weeklyPlanBoard"></div>
+
+        <div class="practice-session-grid">
+          <article class="practice-session-card" aria-label="Câu hỏi nhiệm vụ">
+            <div class="quiz-topline">
+              <span id="practiceModeLabel">Bài tập ngày</span>
+              <span id="practiceProgressText">0/20</span>
+            </div>
+            <h3 id="practiceQuestion">Chọn môn để bắt đầu.</h3>
+            <div class="answer-grid" id="practiceAnswerGrid"></div>
+            <p class="feedback" id="practiceFeedback" aria-live="polite"></p>
+          </article>
+
+          <article class="certificate-panel" aria-label="Bằng khen online">
+            <div class="certificate-card" id="certificateArea">
+              <p class="eyebrow">Bằng khen online</p>
+              <h3>Chứng nhận học giỏi</h3>
+              <p>Con đã làm bài xuất sắc. Hoàn thành mục tiêu để mở bằng khen nhé.</p>
+            </div>
+            <button class="small-btn" id="printCertificateBtn" type="button" disabled>In / Lưu PDF</button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="celebration-layer" id="celebrationLayer" aria-hidden="true"></div>
+    <script src="common.js"></script>
+    <script src="script.js"></script>
+    <script src="video-library.js"></script>
+  </body>
+</html>

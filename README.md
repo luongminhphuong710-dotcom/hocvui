@@ -8,7 +8,11 @@ Mở file `index.html` bằng trình duyệt.
 
 ## Cấu trúc trang
 
-- `index.html`: Trang Học, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng danh sách bài học, video bài giảng, bài tập, nhiệm vụ ngày/tuần. Mỗi môn có mục tiêu ngày ít nhất 20 câu; hoàn thành sẽ nhận bằng khen online với câu "Chứng nhận học giỏi".
+- `index.html` (Hôm nay): 3 nhiệm vụ mỗi ngày (Toán, Tiếng Việt/Anh xen kẽ, Kỹ năng sống do bố mẹ xác nhận). Xong cả 3 thì mở Góc trò chơi, tích sao đổi quà.
+- `bo-me.html` (Góc bố mẹ, khoá bằng phép tính): báo cáo 7 ngày, hồ sơ con (tên, lớp, giờ chơi), phần thưởng, thao tác nhanh.
+- `common.js`: dữ liệu dùng chung (sao, nhật ký, hồ sơ) lưu trong trình duyệt.
+
+- `hoc-bai.html`: Trang Học bài, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng danh sách bài học, video bài giảng, bài tập, nhiệm vụ ngày/tuần. Mỗi môn có mục tiêu ngày ít nhất 20 câu; hoàn thành sẽ nhận bằng khen online với câu "Chứng nhận học giỏi".
 - `tro-choi.html`: Góc trò chơi có thanh điều khiển bên trái để chọn game (Công chúa nhỏ – thời trang, Đào vàng Tiếng Anh, Nông trại), chơi lại, toàn màn hình, mở tab mới và hẹn giờ nghỉ mắt 30 phút/ngày (ba mẹ có thể cho thêm 10 phút). Các game nằm trong thư mục `games/`.
 - `giai-tri.html`: Trang Giải trí, có Giải đố, Mini game, Game khác và video truyện cổ tích.
 - `chup-anh-vui.html`: Trang Chụp ảnh vui, có photobooth dùng camera trước, chọn bộ theme, ghép khung và tải ảnh PNG. Có bộ theme Con trai, Con gái, Gia đình, Nơ hồng; khi chụp thành công sẽ có âm báo và hiệu ứng trên màn hình.

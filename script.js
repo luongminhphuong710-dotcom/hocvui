@@ -849,7 +849,7 @@ const boothFrames = [
 ];
 
 const state = {
-  grade: 1,
+  grade: (() => { try { return Number(JSON.parse(localStorage.getItem("hv-profile") || "{}").grade) || 1; } catch (e) { return 1; } })(),
   subject: "math",
   lessonIndex: 0,
   quizIndex: 0,
