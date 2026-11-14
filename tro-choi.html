@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trò chơi - Học vui - Vui học</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .arcade { width: min(1400px, calc(100% - 1.5rem)); padding-top: 1rem; display: grid; grid-template-columns: 280px 1fr; gap: 1rem; }
+      .dock { position: sticky; top: 86px; align-self: start; display: flex; flex-direction: column; gap: .7rem; padding: 1rem; border: 2px solid var(--ink); border-radius: 14px; background: var(--white); box-shadow: 6px 6px 0 var(--sun); }
+      .dock h1 { margin: 0; font-size: 1.25rem; }
+      .dock .hint { margin: 0 0 .3rem; color: var(--muted); font-size: .9rem; }
+      .game-btn { display: flex; align-items: center; gap: .75rem; width: 100%; padding: .7rem .8rem; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); text-align: left; cursor: pointer; font: inherit; }
+      .game-btn:hover { border-color: var(--soft-line); }
+      .game-btn.is-active { border-color: var(--ink); background: #e7f7ff; box-shadow: 3px 3px 0 var(--mint); }
+      .game-btn .ico { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 10px; font-size: 1.6rem; }
+      .game-btn b { display: block; font-size: 1rem; }
+      .game-btn small { display: block; color: var(--muted); line-height: 1.3; }
+      .tools { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: .3rem; }
+      .tools button, .tools a { padding: .55rem; border: 1px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); font: inherit; font-weight: 700; font-size: .88rem; cursor: pointer; text-align: center; text-decoration: none; }
+      .tools button:hover, .tools a:hover { background: #fff6dc; }
+      .timer { padding: .6rem .7rem; border-radius: 10px; background: #f1fbf6; font-size: .9rem; }
+      .timer strong { font-size: 1.1rem; }
+      .stage { position: relative; min-height: calc(100vh - 110px); border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--white); }
+      .stage iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+      .rest { position: absolute; inset: 0; z-index: 2; display: none; place-content: center; text-align: center; gap: .6rem; background: rgba(255,253,247,.97); padding: 2rem; }
+      .rest.show { display: grid; }
+      .rest div { font-size: 4rem; }
+      @media (max-width: 860px) {
+        .arcade { grid-template-columns: 1fr; }
+        .dock { position: static; }
+        .game-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+        .game-btn { flex-direction: column; text-align: center; padding: .55rem .3rem; }
+        .game-btn small { display: none; }
+        .stage { min-height: 78vh; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Về trang học">
+        <span class="brand-mark" aria-hidden="true">HV</span>
+        <span>Học vui - Vui học</span>
+      </a>
+      <nav class="topnav" aria-label="Trang chính">
+        <a href="index.html">Học</a>
+        <a class="is-active" href="tro-choi.html">Trò chơi</a>
+        <a href="giai-tri.html">Giải trí</a>
+        <a href="chup-anh-vui.html">Chụp ảnh</a>
+        <a href="ban-tin.html">Bản tin</a>
+      </nav>
+    </header>
+
+    <main class="arcade">
+      <aside class="dock" aria-label="Thanh điều khiển trò chơi">
+        <h1>🎮 Góc trò chơi</h1>
+        <p class="hint">Vừa chơi vừa học Toán, Tiếng Việt, Tiếng Anh.</p>
+        <div class="game-list" id="gameList"></div>
+        <div class="timer" id="timer">⏱️ Đã chơi: <strong id="mins">0</strong> / <span id="limitText">30</span> phút</div>
+        <div class="tools">
+          <button id="reload" type="button">🔄 Chơi lại</button>
+          <button id="full" type="button">⛶ Toàn màn hình</button>
+          <a id="newtab" href="#" target="_blank" rel="noopener">↗ Mở tab mới</a>
+          <a href="index.html">📚 Về học bài</a>
+        </div>
+      </aside>
+
+      <section class="stage" id="stage">
+        <iframe id="frame" title="Trò chơi" allow="fullscreen; autoplay"></iframe>
+        <div class="rest" id="rest">
+          <div>🌙</div>
+          <h2>Nghỉ mắt một chút nhé!</h2>
+          <p>Bé đã chơi đủ thời gian hôm nay. Đứng dậy vươn vai, uống nước rồi quay lại học bài nha.</p>
+          <p><button class="game-btn" style="justify-content:center;width:auto;margin:auto" id="more" type="button">Ba mẹ cho chơi thêm 10 phút</button></p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const games = [
+        { id: "thoi-trang", file: "games/thoi-trang.html", icon: "👑", bg: "#ffe3ef", name: "Công chúa nhỏ", desc: "Vượt 10 chặng, kiếm kim cương, trang điểm công chúa" },
+        { id: "dao-vang", file: "games/dao-vang.html", icon: "⛏️", bg: "#fff1c9", name: "Đào vàng", desc: "12 tầng mỏ học Tiếng Anh" },
+        { id: "nong-trai", file: "games/nong-trai.html", icon: "🌻", bg: "#e3f6d8", name: "Nông trại", desc: "Trồng cây, bán hàng, học Toán và Tiếng Anh" }
+      ];
+      const $ = (id) => document.getElementById(id);
+      const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+      const list = $("gameList"), frame = $("frame");
+      let current;
+
+      function open(id) {
+        const g = games.find((x) => x.id === id) || games[0];
+        current = g;
+        frame.src = g.file;
+        $("newtab").href = g.file;
+        document.querySelectorAll(".game-btn[data-id]").forEach((b) => b.classList.toggle("is-active", b.dataset.id === g.id));
+        history.replaceState(null, "", "#" + g.id);
+        store.set("hv-last-game", g.id);
+      }
+
+      games.forEach((g) => {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "game-btn"; b.dataset.id = g.id;
+        b.innerHTML = `<span class="ico" style="background:${g.bg}">${g.icon}</span><span><b>${g.name}</b><small>${g.desc}</small></span>`;
+        b.onclick = () => open(g.id);
+        list.appendChild(b);
+      });
+
+      $("reload").onclick = () => { if (current) frame.src = current.file; };
+      $("full").onclick = () => { const s = $("stage"); (s.requestFullscreen || s.webkitRequestFullscreen || (() => {})).call(s); };
+
+      // Hẹn giờ nghỉ mắt: đếm phút chơi trong ngày
+      const today = new Date().toISOString().slice(0, 10);
+      if (store.get("hv-play-day") !== today) { store.set("hv-play-day", today); store.set("hv-play-min", "0"); store.set("hv-play-limit", "30"); }
+      let mins = +store.get("hv-play-min") || 0, limit = +store.get("hv-play-limit") || 30;
+      const render = () => { $("mins").textContent = mins; $("limitText").textContent = limit; $("rest").classList.toggle("show", mins >= limit); };
+      setInterval(() => { if (!document.hidden && mins < limit) { mins++; store.set("hv-play-min", mins); render(); } }, 60000);
+      $("more").onclick = () => { limit += 10; store.set("hv-play-limit", limit); render(); };
+      render();
+
+      open(location.hash.slice(1) || store.get("hv-last-game") || games[0].id);
+    </script>
+  </body>
+</html>
