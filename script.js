@@ -1904,7 +1904,7 @@ function applyBoothFrame() {
 
   const frame = currentBoothFrame();
   dom.boothFrameOverlay.className = `booth-frame ${frame.className}`;
-  if (dom.boothFrameName) dom.boothFrameName.textContent = frame.label;
+  
 }
 
 async function startBoothCamera() {
@@ -2016,7 +2016,6 @@ function drawImageCover(context, image, width, height) {
 function finishBoothCanvas(context, width, height, message) {
   if (!dom.boothCanvas || !dom.photoPreview || !dom.downloadPhotoLink) return;
 
-  drawBoothFrame(context, width, height, currentBoothFrame());
   const imageUrl = dom.boothCanvas.toDataURL("image/png");
   showBoothStillPreview(imageUrl);
   dom.photoPreview.src = imageUrl;

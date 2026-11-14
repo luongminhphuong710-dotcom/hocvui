@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chụp ảnh vui - Học vui - Vui học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -17,7 +20,6 @@
         <a href="tro-choi.html">Trò chơi</a>
         <a href="giai-tri.html">Giải trí</a>
         <a class="is-active" href="chup-anh-vui.html">Chụp ảnh</a>
-        <a href="ban-tin.html">Bản tin</a>
       </nav>
     </header>
 
@@ -26,26 +28,16 @@
         <div>
           <p class="eyebrow">Photobooth</p>
           <h1>Chụp ảnh vui.</h1>
-          <p class="intro-text">Bé chọn khung, bật camera trước và bấm chụp.</p>
+          <p class="intro-text">Bật camera, tạo dáng thật xinh và bấm chụp.</p>
         </div>
       </section>
 
       <section class="photobooth-layout" aria-label="Chụp ảnh vui">
-        <aside class="frame-panel" aria-label="Danh sách khung ảnh">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Khung ảnh</p>
-              <h2>Chọn theme</h2>
-            </div>
-          </div>
-          <div class="theme-tabs" id="boothThemeTabs" aria-label="Bộ theme"></div>
-          <div class="frame-list" id="boothFrameList"></div>
-        </aside>
 
         <section class="camera-body" aria-label="Máy ảnh">
           <div class="camera-top">
             <span class="camera-dot" aria-hidden="true"></span>
-            <span class="camera-label" id="boothFrameName">Cầu vồng</span>
+            <span class="camera-label" id="boothFrameName">Ảnh của bé</span>
             <span class="viewfinder-dot" aria-hidden="true"></span>
           </div>
 
@@ -53,7 +45,6 @@
             <div class="camera-viewfinder" id="cameraViewfinder">
               <video id="boothVideo" autoplay playsinline muted></video>
               <img class="camera-still-preview" id="boothStillPreview" alt="Ảnh vừa chụp" />
-              <div class="booth-frame frame-rainbow" id="boothFrameOverlay" aria-hidden="true"></div>
               <div class="capture-success" id="captureSuccess" aria-hidden="true">
                 <span></span>
                 <strong>Đã chụp!</strong>
