@@ -1983,7 +1983,7 @@ function handleMobilePhotoInput(event) {
     canvas.height = height;
     const context = canvas.getContext("2d");
     drawImageCover(context, image, width, height);
-    finishBoothCanvas(context, width, height, "Ảnh từ điện thoại đã ghép khung.");
+    finishBoothCanvas(context, width, height, "Ảnh từ điện thoại đã sẵn sàng.");
     URL.revokeObjectURL(imageUrl);
     event.target.value = "";
   };
@@ -2968,11 +2968,7 @@ function updateBoothStatus(message) {
 }
 
 function setupPhotoBooth() {
-  if (!dom.boothFrameList) return;
-
-  renderBoothThemeTabs();
-  renderBoothFrames();
-  applyBoothFrame();
+  if (!dom.boothVideo) return;
   dom.startCameraBtn?.addEventListener("click", startBoothCamera);
   dom.capturePhotoBtn?.addEventListener("click", captureBoothPhoto);
   dom.retakePhotoBtn?.addEventListener("click", clearBoothPhoto);

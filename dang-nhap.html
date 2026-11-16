@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập - Học vui - Vui học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <main class="auth">
+      <section class="auth-hero">
+        <div class="logo" aria-hidden="true">🎒</div>
+        <h1>Học vui - Vui học</h1>
+        <p class="muted">Mỗi bé một tài khoản. Học ở máy nào cũng giữ nguyên sao và tiến bộ.</p>
+      </section>
+
+      <section class="auth-card">
+        <p class="err" id="expired" hidden>Phiên đăng nhập đã hết. Con đăng nhập lại nhé.</p>
+        <div class="auth-tabs" role="tablist">
+          <button type="button" class="is-on" data-tab="login">Đăng nhập</button>
+          <button type="button" data-tab="register">Tạo tài khoản mới</button>
+        </div>
+
+        <form id="loginForm" class="form" autocomplete="on">
+          <label>Tên đăng nhập<input name="username" autocomplete="username" autocapitalize="none" required /></label>
+          <label>Mật khẩu<input name="password" type="password" autocomplete="current-password" required /></label>
+          <p class="err" aria-live="polite"></p>
+          <button class="btn wide">Vào học thôi!</button>
+        </form>
+
+        <form id="registerForm" class="form" hidden autocomplete="off">
+          <label>Tên của bé<input name="name" maxlength="24" placeholder="Ví dụ: Bông" required /></label>
+          <fieldset><legend>Bé đang học lớp mấy?</legend>
+            <div class="grade-pick" id="gradePick"></div>
+          </fieldset>
+          <fieldset><legend>Chọn ảnh đại diện</legend><div class="avatars" id="avatarPick"></div></fieldset>
+          <label>Tên đăng nhập<input name="username" autocapitalize="none" placeholder="vd: bong.lop2" required /></label>
+          <p class="hint">3–20 ký tự: chữ thường không dấu, số, dấu chấm hoặc gạch dưới.</p>
+          <label>Mật khẩu (ít nhất 4 ký tự)<input name="password" type="password" autocomplete="new-password" minlength="4" required /></label>
+          <p class="err" aria-live="polite"></p>
+          <button class="btn wide">Tạo tài khoản</button>
+        </form>
+        <p class="auth-note muted">Bố mẹ giúp con tạo tài khoản và ghi nhớ mật khẩu nhé.</p>
+      </section>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+      {
+        const $ = (s) => document.querySelector(s);
+        if (HVAuth.session()) location.replace("index.html");
+        if (location.hash === "#het-han") $("#expired").hidden = false;
+
+        document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => {
+          document.querySelectorAll("[data-tab]").forEach((x) => x.classList.toggle("is-on", x === b));
+          $("#loginForm").hidden = b.dataset.tab !== "login";
+          $("#registerForm").hidden = b.dataset.tab !== "register";
+        }));
+
+        let grade = 2, avatar = "👧";
+        const drawGrades = () => ($("#gradePick").innerHTML = [1, 2, 3, 4, 5].map((g) => `<button type="button" class="${g === grade ? "is-on" : ""}" data-g="${g}"><small>Lớp</small><b>${g}</b></button>`).join(""));
+        const AV = ["👧", "👦", "👸", "🧚", "🦸", "🐱", "🐰", "🦄", "🐼", "🦊"];
+        const drawAv = () => ($("#avatarPick").innerHTML = AV.map((a) => `<button type="button" class="av${a === avatar ? " is-on" : ""}" data-a="${a}">${a}</button>`).join(""));
+        drawGrades(); drawAv();
+        $("#gradePick").onclick = (e) => { const b = e.target.closest("[data-g]"); if (b) { grade = Number(b.dataset.g); drawGrades(); } };
+        $("#avatarPick").onclick = (e) => { const b = e.target.closest("[data-a]"); if (b) { avatar = b.dataset.a; drawAv(); } };
+
+        const busy = (f, on) => { const b = f.querySelector(".btn"); b.disabled = on; b.dataset.t = b.dataset.t || b.textContent; b.textContent = on ? "Đang xử lý..." : b.dataset.t; };
+
+        $("#loginForm").onsubmit = async (e) => {
+          e.preventDefault(); const f = e.target; const err = f.querySelector(".err"); err.textContent = ""; busy(f, true);
+          try { await HVAuth.login(f.username.value, f.password.value); location.href = "index.html"; }
+          catch (x) { err.textContent = x.message; busy(f, false); }
+        };
+        $("#registerForm").onsubmit = async (e) => {
+          e.preventDefault(); const f = e.target; const err = f.querySelector(".err"); err.textContent = ""; busy(f, true);
+          try {
+            await HVAuth.register({ name: f.name.value, grade, avatar, username: f.username.value, password: f.password.value });
+            location.href = "index.html";
+          } catch (x) { err.textContent = x.message; busy(f, false); }
+        };
+      }
+    </script>
+  </body>
+</html>

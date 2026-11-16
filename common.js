@@ -88,9 +88,14 @@ const HV = (() => {
     if (!bar || bar.querySelector(".hv-head")) return;
     const p = profile();
     const el = document.createElement("div"); el.className = "hv-head";
+    const acc = typeof HVAuth !== "undefined" ? HVAuth.session() : null;
     el.innerHTML = `<span class="hv-pill" title="Sao của bé">⭐ <b id="hvStars">${stars()}</b></span>
+      ${acc ? `<details class="hv-acc"><summary title="Tài khoản">${p.avatar} <span>${p.name}</span></summary>
+        <div class="hv-acc-menu"><p>Đăng nhập: <b>${acc.username}</b><br />Lớp ${p.grade}</p>
+        <button type="button" class="btn ghost" id="hvLogout">Đăng xuất / Đổi bé</button></div></details>` : ""}
       <a class="hv-lock" href="bo-me.html" title="Góc bố mẹ" aria-label="Góc bố mẹ">🔒</a>`;
     bar.append(el);
+    const lo = el.querySelector("#hvLogout"); if (lo) lo.onclick = () => HVAuth.logout();
     addEventListener("storage", () => { const s = document.querySelector("#hvStars"); if (s) s.textContent = stars(); });
   }
   document.addEventListener("DOMContentLoaded", headerStars);
