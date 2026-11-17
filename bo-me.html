@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="bo-me.css" />
   </head>
   <body>
     <header class="topbar">
@@ -25,62 +26,129 @@
       </nav>
     </header>
 
+    <main class="today" id="locked">
+      <section class="panel-card center-card">
+        <p class="gate-lock">🔒</p>
+        <h1>Góc bố mẹ</h1>
+        <p class="muted">Phần này dành cho bố mẹ.</p>
+        <button class="btn" id="unlockBtn">Mở Góc bố mẹ</button>
+      </section>
+    </main>
+
     <main class="today" id="parentApp" hidden>
-      <section class="page-head">
-        <h1>🔒 Góc bố mẹ</h1>
-        <p class="muted">Theo dõi việc học của con, cài giờ chơi và đặt phần thưởng. Dữ liệu chỉ lưu trên thiết bị này.</p>
+      <section class="pm-head">
+        <div class="pm-kid"><span id="kidAvatar">👧</span><div><h1 id="kidName">Góc bố mẹ</h1><p class="muted" id="kidSub"></p></div></div>
+        <div class="pm-tabs" role="tablist" aria-label="Các mục của bố mẹ">
+          <button role="tab" class="is-on" data-tab="overview">📊 Tổng quan</button>
+          <button role="tab" data-tab="history">🗂️ Lịch sử học</button>
+          <button role="tab" data-tab="videos">🎬 Video đã xem</button>
+          <button role="tab" data-tab="goals">🎯 Mục tiêu & phần quà</button>
+          <button role="tab" data-tab="profile">⚙️ Hồ sơ & cài đặt</button>
+        </div>
       </section>
 
-      <section class="stat-grid" id="stats"></section>
-
-      <section class="panel-card">
-        <h2 class="block-title">7 ngày gần nhất</h2>
-        <div class="table-wrap"><table class="report" id="report"></table></div>
-        <p class="muted" id="advice"></p>
+      <section data-panel="overview">
+        <h2 class="block-title">Hôm nay so với mục tiêu</h2>
+        <div class="kpis" id="kpiToday"></div>
+        <div class="two-col">
+          <section class="panel-card">
+            <h2 class="block-title">Thời gian học 14 ngày</h2>
+            <div class="legend"><span><i style="background:#2a78d6"></i>Học bài, nhiệm vụ</span><span><i style="background:#eb6834"></i>Xem video</span><span><i class="goal-swatch"></i>Mục tiêu</span></div>
+            <div class="chart" id="chart" role="img" aria-label="Biểu đồ số phút học mỗi ngày trong 14 ngày"></div>
+            <details class="tbl-toggle"><summary>Xem dạng bảng</summary><div class="table-wrap"><table class="report" id="chartTable"></table></div></details>
+          </section>
+          <section class="panel-card">
+            <h2 class="block-title">Tuần này</h2>
+            <div class="week" id="week"></div>
+            <h3 class="sub-title">Kết quả theo môn (7 ngày)</h3>
+            <div id="subjects"></div>
+            <p class="advice" id="advice"></p>
+          </section>
+        </div>
+        <section class="panel-card">
+          <h2 class="block-title">Tiến độ lộ trình lớp <span id="pathGrade"></span></h2>
+          <div class="path-prog" id="pathProg"></div>
+        </section>
       </section>
 
-      <div class="two-col">
-        <section class="panel-card">
-          <h2 class="block-title">Hồ sơ của con</h2>
-          <form id="profileForm" class="form">
-            <label>Tên gọi của con<input name="name" maxlength="20" required /></label>
-            <fieldset><legend>Ảnh đại diện</legend><div class="avatars" id="avatars"></div></fieldset>
-            <label>Lớp<select name="grade">
-              <option value="1">Lớp 1</option><option value="2">Lớp 2</option><option value="3">Lớp 3</option><option value="4">Lớp 4</option><option value="5">Lớp 5</option>
-            </select></label>
-            <label>Giờ chơi game mỗi ngày (phút)<input name="playLimit" type="number" min="5" max="180" step="5" required /></label>
-            <label class="check"><input name="requireMissions" type="checkbox" /> Chỉ mở game khi con làm xong 3 nhiệm vụ</label>
-            <button class="btn">Lưu hồ sơ</button>
-          </form>
-        </section>
+      <section data-panel="history" hidden class="panel-card">
+        <div class="row-between"><h2 class="block-title">Lịch sử học</h2>
+          <div class="filters" id="histFilter"></div></div>
+        <div id="histList"></div>
+      </section>
 
-        <section class="panel-card">
-          <h2 class="block-title">Phần thưởng</h2>
-          <p class="muted">Đặt quà thật để con có động lực. Quà có chữ “phút” sẽ tự cộng thêm giờ chơi game hôm đó.</p>
-          <div id="rewardEdit" class="reward-edit"></div>
-          <form id="addReward" class="inline-form">
-            <input name="name" placeholder="Ví dụ: Đi ăn kem" required maxlength="40" />
-            <input name="cost" type="number" min="1" placeholder="Số sao" required />
-            <button class="btn">Thêm</button>
-          </form>
-          <h3 class="sub-title">Đã đổi gần đây</h3>
-          <ul class="history" id="history"></ul>
-        </section>
-      </div>
+      <section data-panel="videos" hidden class="panel-card">
+        <h2 class="block-title">Video con đã xem</h2>
+        <p class="muted">Video nào không phù hợp, bố mẹ bấm “Ẩn video”. Con sẽ không thấy video đó nữa.</p>
+        <div id="vidList"></div>
+        <h3 class="sub-title">Video đã ẩn</h3>
+        <div id="blockList"></div>
+      </section>
 
-      <section class="panel-card">
-        <h2 class="block-title">Thao tác nhanh</h2>
-        <div class="quick">
-          <button class="btn" id="unlockToday">🎮 Mở khoá game hôm nay</button>
-          <button class="btn ghost" id="plus5">⭐ Thưởng 5 sao</button>
-          <button class="btn ghost" id="minus5">Trừ 5 sao</button>
-          <button class="btn ghost" id="resetToday">Làm lại nhiệm vụ hôm nay</button>
+      <section data-panel="goals" hidden>
+        <div class="two-col">
+          <section class="panel-card">
+            <h2 class="block-title">Mức cần đạt</h2>
+            <p class="muted">Bố mẹ tự điền. Một ngày được tính là <b>đạt mục tiêu</b> khi con học đủ số phút, làm đủ số câu và đạt tỉ lệ đúng.</p>
+            <form id="goalForm" class="form">
+              <label>Thời gian học mỗi ngày (phút)<input name="minutes" type="number" min="5" max="240" step="5" required /></label>
+              <label>Số câu luyện tập mỗi ngày<input name="questions" type="number" min="1" max="200" required /></label>
+              <label>Tỉ lệ trả lời đúng ngay lần đầu (%)<input name="accuracy" type="number" min="0" max="100" step="5" required /></label>
+              <label>Số bài học lộ trình mỗi tuần<input name="lessonsWeek" type="number" min="0" max="50" required /></label>
+              <label>Số ngày đạt mục tiêu mỗi tuần<input name="daysWeek" type="number" min="1" max="7" required /></label>
+              <button class="btn">Lưu mục tiêu</button>
+            </form>
+          </section>
+          <section class="panel-card">
+            <h2 class="block-title">Phần quà</h2>
+            <p class="muted">Đặt quà và điều kiện nhận. Khi con đạt, bố mẹ duyệt ở trang Hôm nay của con.</p>
+            <div id="rewardEdit" class="reward-edit"></div>
+            <form id="addReward" class="form add-reward">
+              <label>Tên phần quà<input name="name" placeholder="Ví dụ: Đi ăn kem cuối tuần" required maxlength="50" /></label>
+              <div class="inline-2">
+                <label>Điều kiện<select name="type" id="rewardType"></select></label>
+                <label>Cần đạt<input name="need" type="number" min="1" required /></label>
+              </div>
+              <button class="btn">Thêm phần quà</button>
+            </form>
+            <h3 class="sub-title">Quà đã trao gần đây</h3>
+            <ul class="history" id="redeemed"></ul>
+          </section>
+        </div>
+      </section>
+
+      <section data-panel="profile" hidden>
+        <div class="two-col">
+          <section class="panel-card">
+            <h2 class="block-title">Hồ sơ của con</h2>
+            <form id="profileForm" class="form">
+              <label>Tên gọi của con<input name="name" maxlength="20" required /></label>
+              <fieldset><legend>Ảnh đại diện</legend><div class="avatars" id="avatars"></div></fieldset>
+              <label>Lớp (đổi lớp thì toàn bộ chương trình học đổi theo)<select name="grade">
+                <option value="1">Lớp 1</option><option value="2">Lớp 2</option><option value="3">Lớp 3</option><option value="4">Lớp 4</option><option value="5">Lớp 5</option>
+              </select></label>
+              <label>Giờ chơi game mỗi ngày (phút)<input name="playLimit" type="number" min="5" max="180" step="5" required /></label>
+              <label class="check"><input name="requireMissions" type="checkbox" /> Chỉ mở game khi con làm xong 3 nhiệm vụ</label>
+              <button class="btn">Lưu hồ sơ</button>
+            </form>
+          </section>
+          <section class="panel-card">
+            <h2 class="block-title">Thao tác nhanh</h2>
+            <div class="quick col">
+              <button class="btn" id="unlockToday">🎮 Mở khoá game hôm nay</button>
+              <button class="btn ghost" id="plus5">⭐ Thưởng 5 sao</button>
+              <button class="btn ghost" id="minus5">Trừ 5 sao</button>
+              <button class="btn ghost" id="resetToday">Làm lại nhiệm vụ hôm nay</button>
+            </div>
+          </section>
         </div>
       </section>
     </main>
 
     <script src="auth.js"></script>
     <script src="common.js"></script>
+    <script src="lesson-data.js"></script>
+    <script src="curriculum.js"></script>
     <script src="bo-me.js"></script>
   </body>
 </html>

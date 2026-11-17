@@ -9,10 +9,10 @@ Mở file `index.html` bằng trình duyệt.
 ## Cấu trúc trang
 
 - `index.html` (Hôm nay): 3 nhiệm vụ mỗi ngày (Toán, Tiếng Việt/Anh xen kẽ, Kỹ năng sống do bố mẹ xác nhận). Xong cả 3 thì mở Góc trò chơi, tích sao đổi quà.
-- `bo-me.html` (Góc bố mẹ, khoá bằng phép tính): báo cáo 7 ngày, hồ sơ con (tên, lớp, giờ chơi), phần thưởng, thao tác nhanh.
+- `bo-me.html` (Góc bố mẹ, khoá bằng phép tính): Tổng quan so với mục tiêu (thời gian học, số câu, tỉ lệ đúng, bài học), biểu đồ 14 ngày, Lịch sử học, Video đã xem (ẩn video không phù hợp), Mục tiêu & phần quà do bố mẹ tự điền, Hồ sơ & cài đặt.
 - `common.js`: dữ liệu dùng chung (sao, nhật ký, hồ sơ) lưu trong trình duyệt.
 
-- `hoc-bai.html`: Trang Học bài, có bộ lọc chọn lớp 1-5. Sau khi chọn lớp, bé chọn môn Toán, Tiếng Việt hoặc Tiếng Anh. Phần Học tách riêng danh sách bài học, video bài giảng, bài tập, nhiệm vụ ngày/tuần. Mỗi môn có mục tiêu ngày ít nhất 20 câu; hoàn thành sẽ nhận bằng khen online với câu "Chứng nhận học giỏi".
+- `hoc-bai.html` (Học bài): tự theo lớp của tài khoản. Phần **Lộ trình bài học** (4 môn: Toán, Tiếng Việt, Tiếng Anh, Kỹ năng sống) gồm các bài theo thứ tự, mỗi bài có ghi nhớ, ví dụ và 6–8 câu luyện tập; đúng từ 50% mới mở bài tiếp. Phần **Video kiến thức** tách riêng: mỗi môn ~24 video, đổi mới mỗi thứ Hai (`api/videos.js`). Nội dung bài: `curriculum.js`, `lesson-data.js`.
 - `tro-choi.html`: Góc trò chơi có thanh điều khiển bên trái để chọn game (Công chúa nhỏ – thời trang, Đào vàng Tiếng Anh, Nông trại), chơi lại, toàn màn hình, mở tab mới và hẹn giờ nghỉ mắt 30 phút/ngày (ba mẹ có thể cho thêm 10 phút). Các game nằm trong thư mục `games/`.
 - `giai-tri.html`: Trang Giải trí, có Giải đố, Mini game, Game khác và video truyện cổ tích.
 - `chup-anh-vui.html`: Trang Chụp ảnh vui, có photobooth dùng camera trước, chọn bộ theme, ghép khung và tải ảnh PNG. Có bộ theme Con trai, Con gái, Gia đình, Nơ hồng; khi chụp thành công sẽ có âm báo và hiệu ứng trên màn hình.

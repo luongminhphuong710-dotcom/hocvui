@@ -1,6 +1,7 @@
 // Trang "Hôm nay": 3 nhiệm vụ mỗi ngày → mở khoá trò chơi, tích sao đổi quà.
 {
   const P = HV.profile();
+  HV.track("learn");
   const QUESTIONS_PER_MISSION = 5;
   const rnd = (n) => Math.floor(Math.random() * n);
   const shuffle = (a) => a.map((v) => [Math.random(), v]).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
@@ -146,7 +147,7 @@
       .join("");
     document.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => play(missions[b.dataset.go])));
     const lb = document.querySelector("[data-life]");
-    if (lb) lb.onclick = () => HV.parentGate(() => { const r = HV.day(); r.life = true; finish(r, "Bố mẹ đã xác nhận. +5 ⭐"); HV.addStars(5); }, "Bố mẹ xác nhận con đã làm xong");
+    if (lb) lb.onclick = () => HV.parentGate(() => { const r = HV.day(); r.life = true; HV.addHistory({ kind: "life", subject: "life", title: `Việc tốt: ${lifeTask[1]}` }); finish(r, "Bố mẹ đã xác nhận. +5 ⭐"); HV.addStars(5); }, "Bố mẹ xác nhận con đã làm xong");
   }
 
   function finish(rec, msg) {
@@ -171,6 +172,7 @@
         panel.innerHTML = `<div class="p-done"><span>🏅</span><h3>Xong nhiệm vụ ${m.title}!</h3>
           <p>Đúng ${rec[m.key].correct}/${QUESTIONS_PER_MISSION} câu.</p><button class="btn" id="pClose">Về nhiệm vụ</button></div>`;
         $("#pClose").onclick = () => { panel.hidden = true; };
+        HV.addHistory({ kind: "mission", subject: m.key, title: `Nhiệm vụ hằng ngày: ${m.title}`, score: rec[m.key].correct, total: QUESTIONS_PER_MISSION });
         finish(rec, `Xong ${m.title}! +3 ⭐`); HV.addStars(3); renderHero();
         return;
       }
@@ -189,7 +191,7 @@
           b.classList.add("ok");
           panel.querySelectorAll(".opt").forEach((x) => (x.disabled = true));
           const r = HV.day(); r[m.key].done++; if (tries === 0) { r[m.key].correct++; HV.addStars(1); }
-          HV.saveDay(r); qi++;
+          HV.saveDay(r); HV.answer(m.key, tries === 0); qi++;
           fb.textContent = tries === 0 ? ["Đúng rồi! +1 ⭐", "Xuất sắc! +1 ⭐", "Giỏi quá! +1 ⭐"][rnd(3)] : "Đúng rồi! Lần sau cố gắng ngay từ đầu nhé.";
           fb.className = "p-fb good"; renderHero(); renderMissions();
           setTimeout(next, 900);
@@ -204,23 +206,32 @@
 
   // ---------- Tủ quà ----------
   function renderRewards() {
-    const s = HV.stars();
-    $("#rewards").innerHTML = P.rewards.length
-      ? P.rewards.map((r, i) => {
-          const pct = Math.min(100, (s / r.cost) * 100);
+    const p = HV.profile();
+    const wk = HV.weekDays()[0];
+    const given = HV.get("hv-given", {});
+    $("#rewards").innerHTML = p.rewards.length
+      ? p.rewards.map((r, i) => {
+          const pr = HV.rewardProgress(r, p);
+          const pct = Math.min(100, (pr.have / pr.need) * 100);
+          const gk = r.type === "stars" ? null : `${r.name}|${r.type === "streak" ? "streak" : wk}`;
+          const done = gk && given[gk];
+          const ready = pr.have >= pr.need && !done;
+          const label = r.type === "stars" ? "Đổi quà" : done ? "Đã nhận" : "Nhận quà";
           return `<div class="reward"><div><strong>🎁 ${r.name}</strong><div class="bar"><i style="width:${pct}%"></i></div>
-            <small>${Math.min(s, r.cost)}/${r.cost} ⭐</small></div>
-            <button class="btn ${s >= r.cost ? "" : "ghost"}" data-r="${i}" ${s >= r.cost ? "" : "disabled"}>Đổi quà</button></div>`;
+            <small>${Math.min(pr.have, pr.need)}/${pr.need} ${pr.unit}</small></div>
+            <button class="btn ${ready ? "" : "ghost"}" data-r="${i}" ${ready ? "" : "disabled"}>${label}</button></div>`;
         }).join("")
       : `<p>Bố mẹ chưa đặt phần thưởng. Vào Góc bố mẹ để thêm nhé.</p>`;
     document.querySelectorAll("[data-r]").forEach((b) => (b.onclick = () => {
-      const r = P.rewards[b.dataset.r];
+      const r = p.rewards[b.dataset.r];
       HV.parentGate(() => {
-        HV.addStars(-r.cost);
-        const h = HV.get("hv-redeemed", []); h.unshift({ name: r.name, cost: r.cost, at: new Date().toISOString() }); HV.set("hv-redeemed", h.slice(0, 50));
+        if (r.type === "stars") HV.addStars(-r.need);
+        else { const g = HV.get("hv-given", {}); g[`${r.name}|${r.type === "streak" ? "streak" : wk}`] = Date.now(); HV.set("hv-given", g); }
+        const h = HV.get("hv-redeemed", []); h.unshift({ name: r.name, type: r.type, need: r.need, at: new Date().toISOString() }); HV.set("hv-redeemed", h.slice(0, 80));
+        HV.addHistory({ kind: "reward", title: `Nhận quà: ${r.name}` });
         if (/phút/.test(r.name)) HV.set("hv-bonus-" + HV.today(), (HV.get("hv-bonus-" + HV.today(), 0) || 0) + (parseInt(r.name.match(/\d+/)) || 15));
-        HV.confetti(); HV.toast(`Đã đổi: ${r.name}`); renderAll();
-      }, `Bố mẹ duyệt đổi quà: ${r.name}`);
+        HV.confetti(); HV.toast(`Đã nhận quà: ${r.name}`); renderAll();
+      }, `Bố mẹ duyệt quà: ${r.name}`);
     }));
   }
 
